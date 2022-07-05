@@ -6,6 +6,7 @@
             [quo2.screens.button :as button]
             [quo2.screens.token-overview :as token-overview]
             [quo2.screens.text :as text]
+            [quo.previews.reacts :as reacts]
             [quo2.screens.tabs :as tabs]
             [quo2.screens.status-tags :as status-tags]
             [quo2.screens.context-tags :as context-tags]
@@ -39,6 +40,12 @@
               {:name      :quo2-icon-avatar
                :insets    {:top false}
                :component icon-avatar/preview-icon-avatar}
+              {:name      :reacts
+               :insets    {:top false}
+               :component reacts/preview-text}
+              {:name      :quo2-button
+               :insets    {:top false}
+               :component button/preview-button}
               {:name      :quo2-status-tags
                :insets    {:top false}
                :component status-tags/preview-status-tags}

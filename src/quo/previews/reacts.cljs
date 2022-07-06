@@ -1,32 +1,47 @@
 (ns quo.previews.reacts
   (:require [reagent.core :as reagent]
             [quo.core :as quo]
-            [quo.animated :as animated]
+            [status-im.ui.components.icons.icons :as icons] 
             [quo.react-native :as rn]
             [quo.design-system.colors :as colors]
             [quo.previews.preview :as preview]))
 
-(def all-props (preview/list-comp [react-count   [1 2 3 4 5]
-                                   dark?         [false true false true false]]
-                                  {:count react-count
-                                   :dark?   dark?}))
 
-(defn render-item [{:keys [count dark?]}]
-  (let [text-color (if dark? "white" "black")]
+(def all-props (preview/list-comp [clicks        [1122 212 0]
+                                   dark?         [false true false]
+                                   neutral?      [true false true]
+                                   emoji         ["😛" "👍" "❤️"]]
+                                  {:emoji emoji
+                                   :clicks clicks
+                                   :dark?   dark?
+                                   :neutral? neutral?}))
+
+(defn render-item
+  "Add your emoji as a param here"
+  [{:keys [emoji clicks dark? neutral?]}] 
+  (let [text-color (if dark? "white" "black")
+        clicks-positive? (pos-int? clicks)]
     [rn/view {:style {:display "flex"
                       :flex-direction "row"
-                      :padding-horizontal 10
-                      :padding-vertical 8 
-                      :background-color   (if dark? "black" "white")
-                      :width "100%"
+                      :justify-content :space-evenly 
+                      :padding-vertical 8
+                      :padding-horizontal (if (not clicks-positive?)
+                                            0
+                                            8)
+                      :background-color   (if dark?
+                                            (if neutral? "#192438" "black")
+                                            (if neutral? "#F0F2F5" "white"))
+                      
                       :margin-top 25
-                      :border-radius 8}}
+                      :border-radius 10
+                      :border-color (if dark? "white" "black")
+                      :border-width 1}}
      [quo/text {:style {:color text-color}}
-      "😛  "]
-     [quo/text {:style {:color text-color}}
-      (str count)]]))
+      (str emoji (if clicks-positive?
+                   (str " " clicks)
+                   ""))]]))
 
-(defn preview-text []
+(defn preview-reacts []
   [rn/view {:background-color (:ui-background @colors/theme) 
             :display "flex" 
             :flex-direction "column"

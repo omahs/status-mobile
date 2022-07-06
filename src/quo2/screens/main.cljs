@@ -42,7 +42,7 @@
                :component icon-avatar/preview-icon-avatar}
               {:name      :reacts
                :insets    {:top false}
-               :component reacts/preview-text}
+               :component reacts/preview-reacts}
               {:name      :quo2-button
                :insets    {:top false}
                :component button/preview-button}

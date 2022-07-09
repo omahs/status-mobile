@@ -15,4 +15,3 @@ if [ ! -z "$METRO_PID" ]; then
 fi
 
 yarn start
-

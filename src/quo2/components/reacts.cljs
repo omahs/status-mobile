@@ -1,19 +1,19 @@
-(ns quo.previews.reacts
+(ns quo2.components.reacts
   (:require [reagent.core :as reagent]
             [quo.core :as quo]
             [status-im.ui.components.icons.icons :as icons]
             [quo.react-native :as rn]
-            [quo.design-system.colors :as colors]))
+            [quo2.foundations.colors :as colors]
+            [quo.design-system.colors :as ds-colors]))
 
 (def reaction-styling
   {:display "flex"
    :flex-direction "row"
-   :padding-vertical 8
+   :padding-vertical 3
    :padding-horizontal 8
    :margin-top 25
    :border-radius 10
-
-   :border-width 1})
+   :gap 4})
 
 (defn render-react
   "Add your emoji as a param here"
@@ -22,29 +22,35 @@
         clicks-positive? (pos-int? @clicks)]
     [rn/touchable-opacity {:on-press #(swap! clicks inc)
                            :style (merge reaction-styling
-                                         {:border-color (if dark? "white" "black")
-                                          :background-color   (if dark?
-                                                                (if neutral? "#192438" "black")
-                                                                (if neutral? "#F0F2F5" "white"))})}
+                                         (cond-> {:background-color   (if dark?
+                                                                        (if neutral? colors/neutral-70 colors/neutral-90)
+                                                                        (if neutral? colors/neutral-30 colors/neutral-10))}
+                                           (and dark? (not neutral?)) (assoc :border-color
+                                                                             colors/neutral-70
+                                                                             :border-width 1)
+                                           (and (not dark?) (not neutral?)) (assoc :border-color colors/neutral-30
+                                                                                   :border-width 1)))}
      [quo/text {:style {:color text-color}}
       (str emoji (if clicks-positive?
                    (str " " @clicks)
                    ""))]]))
 
 (defn open-reactions-menu
-  [{:keys [is-open? bg-open bg-closed]}]
-  [rn/touchable-opacity {:on-press #(swap! is-open? not)
+  [{:keys [dark?]}]
+  [rn/touchable-opacity {:on-press #(swap! dark? not)
                          :style (merge reaction-styling
                                        {:margin-top 25
-                                        :background-color (if @is-open?
-                                                            bg-open
-                                                            bg-closed)})}
+                                        :border-width 1
+                                        :border-color   (if @dark?
+                                                          colors/white-opa-5
+                                                          colors/neutral-80)})}
    [icons/icon :main-icons/add-reaction-emoji
-    {:style {:color "black"
-             :opacity (if @is-open? 0.5 1)}}]])
+    {:color (if @dark?
+              "white"
+              "black")}]])
 
 (defn preview-reacts []
-  [rn/view {:background-color (:ui-background @colors/theme)
+  [rn/view {:background-color (:ui-background @ds-colors/theme)
             :display "flex"
             :flex-direction "column"
             :align-items "center"}
@@ -64,8 +70,7 @@
                   :clicks (reagent/atom 9999)
                   :dark? true
                   :neutral? true}]
-   [open-reactions-menu {:is-open? (reagent/atom true)
-                         :bg-open "red"
-                         :bg-closed "white"}]])
+   [open-reactions-menu {:dark? (reagent/atom false)}]
+   [open-reactions-menu {:dark? (reagent/atom true)}]])
 
 

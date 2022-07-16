@@ -26,7 +26,8 @@
        [preview/customizer state descriptor]
        [rn/view {:padding-vertical 60
                  :align-items      :center}
-        [quo2/render-react @state]]])))
+        [quo2/render-react @state]
+        [quo2/open-reactions-menu @state]]])))
 
 (defn preview-reacts []
   [rn/view {:background-color (:ui-background @colors/theme)

@@ -15,6 +15,21 @@
    :border-radius 10
    :gap 4})
 
+(defn open-reactions-menu
+  [{:keys [dark? on-press] :as props}]
+  (let [_ (prn dark? props)]
+   [rn/touchable-opacity {:on-press on-press
+                          :style (merge reaction-styling
+                                        {:margin-top 25
+                                         :border-width 1
+                                         :border-color   (if dark?
+                                                           colors/white-opa-5
+                                                           colors/neutral-80)})}
+    [icons/icon :main-icons/add-reaction-emoji
+     {:color (if dark?
+               "white"
+               "black")}]]))
+
 (defn render-react
   "Add your emoji as a param here"
   [{:keys [emoji clicks dark? neutral? on-press]}]

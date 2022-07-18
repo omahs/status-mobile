@@ -14,9 +14,9 @@
                  {:label "Dark"
                   :key   :dark?
                   :type  :boolean}
-                  {:label "Neutral"
-                   :key   :neutral?
-                   :type  :boolean}])
+                 {:label "Neutral"
+                  :key   :neutral?
+                  :type  :boolean}])
 
 (defn cool-preview []
   (let [state (reagent/atom {})]

@@ -1,10 +1,8 @@
 (ns quo2.components.reacts
-  (:require [reagent.core :as reagent]
-            [quo.core :as quo]
+  (:require [quo.core :as quo]
             [status-im.ui.components.icons.icons :as icons]
             [quo.react-native :as rn]
-            [quo2.foundations.colors :as colors]
-            [quo.design-system.colors :as ds-colors]))
+            [quo2.foundations.colors :as colors]))
 
 (def reaction-styling
   {:display "flex"

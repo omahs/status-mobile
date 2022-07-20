@@ -32,14 +32,14 @@
   [{:keys [size dark?]}]
   (let [icon-color (if dark?
                      (:dark light-mode-color)
-                     (:light light-mode-color)) 
+                     (:light light-mode-color))
         avatar-size (size sizes)
         avatar-border-radius (size border-radii)
         inner-icon-size (size inner-icon-sizes)]
     [rn/view {:background-color icon-color
               :style {:width avatar-size
                       :height avatar-size
-                      :border-radius avatar-border-radius 
+                      :border-radius avatar-border-radius
                       :justify-content :center
                       :align-items :center}}
      [icons/icon :main-icons/peach16

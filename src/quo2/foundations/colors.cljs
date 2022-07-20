@@ -183,6 +183,7 @@
 (def info-50-opa-30 (alpha info-50 0.3))
 (def info-50-opa-40 (alpha info-50 0.4))
 
+<<<<<<< HEAD
 ;; Customization
 (def purple-50 "#8661C1")
 (def purple-60 "#5E478C")
@@ -233,6 +234,13 @@
 
 (defn custom-color [color theme]
   (get-in customization [theme color]))
+=======
+;;;;Purple
+(def purple "#8661C1")
+(def purple-opa-20 (alpha purple 0.2))
+(def purple-opa-50 (alpha purple 0.5))
+(def purple-opa-60 (alpha purple 0.6))
+>>>>>>> b5b4cc16a (account-avatar component)
 
 ;;;;Switcher
 (def switcher-background "#040B14")

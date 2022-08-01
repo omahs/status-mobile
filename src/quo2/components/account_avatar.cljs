@@ -29,20 +29,20 @@
    :small 12})
 
 (defn account-avatar
-  [{:keys [size dark?]}]
+  [{:keys [size dark? icon]}]
   (let [icon-color (if dark?
                      (:dark light-mode-color)
                      (:light light-mode-color))
         avatar-size (size sizes)
         avatar-border-radius (size border-radii)
         inner-icon-size (size inner-icon-sizes)]
-    [rn/view {:background-color icon-color
-              :style {:width avatar-size
+    [rn/view {:style {:width avatar-size
+                      :background-color icon-color
                       :height avatar-size
                       :border-radius avatar-border-radius
                       :justify-content :center
                       :align-items :center}}
-     [icons/icon :main-icons/peach16
+     [icons/icon (keyword (str "main-icons/" icon))
       {:color "nil"
        :container-style {:width  inner-icon-size
                          :height inner-icon-size}}]]))

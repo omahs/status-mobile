@@ -8,6 +8,9 @@
 (def descriptor [{:label   "Dark"
                   :key     :dark?
                   :type    :boolean}
+                 {:label   "Icon"
+                  :key     :icon
+                  :type    :text}
                  {:label   "Size"
                   :key     :size
                   :type    :select

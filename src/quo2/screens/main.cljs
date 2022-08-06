@@ -6,7 +6,7 @@
             [quo2.screens.button :as button]
             [quo2.screens.token-overview :as token-overview]
             [quo2.screens.reacts :as reacts]
-            [quo2.screens.text :as text] 
+            [quo2.screens.text :as text]
             [quo2.screens.tabs :as tabs]
             [quo2.screens.status-tags :as status-tags]
             [quo2.screens.context-tags :as context-tags]

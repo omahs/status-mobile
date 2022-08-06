@@ -4,8 +4,8 @@
             [status-im.ui.components.icons.icons :as icons]))
 
 (def light-mode-color
-  {:dark colors/purple-opa-60
-   :light colors/purple-opa-20})
+  {:dark colors/customization-purple-60
+   :light colors/customization-purple-50})
 
 (def sizes
   {:xxl 80
@@ -22,11 +22,11 @@
    :small 6})
 
 (def inner-icon-sizes
-  {:xxl 48
+  {:xxl 36
    :xl 24
-   :large 20
-   :medium 12
-   :small 12})
+   :large 15
+   :medium 11
+   :small 11})
 
 (defn account-avatar
   [{:keys [size dark? icon]}]

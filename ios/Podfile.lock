@@ -670,7 +670,6 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 60f654e00b6cc416573f6d5dbfce3839958eb57a
   react-native-shake: de052eaa3eadc4a326b8ddd7ac80c06e8d84528c
   react-native-slider: 12bd76d3d568c9c5500825db54123d44b48e4ad4
-  react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-status: 21f75d492fd311dc111303da38a7a2b23a8a8466
   react-native-status-keycard: 961d01ca190889ddf220206822fd752f8f4f3f7a
   react-native-webview: 28a8636d97ee641f2ee8f20492d7a6c269c1d703

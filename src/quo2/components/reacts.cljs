@@ -5,7 +5,7 @@
             [quo2.foundations.colors :as colors]))
 
 (def reaction-styling
-  {:display "flex"
+  {:display :flex
    :flex-direction "row"
    :padding-vertical 3
    :padding-horizontal 8
@@ -25,15 +25,15 @@
                                                             colors/neutral-80)})}
      [icons/icon :main-icons/add-reaction-emoji
       {:color (if dark?
-                "white"
-                "black")}]]))
+                colors/white
+                colors/black)}]]))
 
 (defn render-react
   "Add your emoji as a param here"
   [{:keys [emoji clicks dark? neutral? on-press]}]
   (let [text-color (if dark? "white" "black")
-        numeric-value (js/parseInt clicks)
-        clicks-positive? (pos-int? numeric-value)]
+        numeric-value (int clicks)
+        clicks-positive? (pos? numeric-value)]
     [rn/touchable-opacity {:on-press on-press
                            :style (merge reaction-styling
                                          (cond-> {:background-color   (if dark?

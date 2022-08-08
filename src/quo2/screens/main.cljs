@@ -12,7 +12,10 @@
             [quo2.screens.context-tags :as context-tags]
             [quo2.screens.group-avatar :as group-avatar]
             [quo2.screens.activity-logs :as activity-logs]
+<<<<<<< HEAD
             [quo2.screens.token-tag :as token-tag]
+=======
+>>>>>>> 531bc7b2e (Fix icon name)
             [quo2.screens.counter :as counter]
             [quo2.screens.wallet-user-avatar :as wallet-user-avatar]
             [quo2.screens.icon-avatar :as icon-avatar]

@@ -31,7 +31,8 @@
 (defn render-react
   "Add your emoji as a param here"
   [{:keys [emoji clicks dark? neutral? on-press]}]
-  (let [text-color (if dark? "white" "black")
+  (let [text-color (if dark? colors/white
+                             colors/black)
         numeric-value (int clicks)
         clicks-positive? (pos? numeric-value)]
     [rn/touchable-opacity {:on-press on-press

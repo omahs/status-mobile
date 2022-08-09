@@ -6,7 +6,7 @@
 
 (def reaction-styling
   {:display :flex
-   :flex-direction "row"
+   :flex-direction :row
    :padding-vertical 3
    :padding-horizontal 8
    :margin-top 25
@@ -19,9 +19,9 @@
                          :style (merge reaction-styling
                                        {:margin-top 25
                                         :border-width 1
-                                        :border-color   (if dark?
-                                                          colors/white-opa-5
-                                                          colors/neutral-80)})}
+                                        :border-color (if dark?
+                                                        colors/white-opa-5
+                                                        colors/neutral-80)})}
    [icons/icon :main-icons/add-reaction-emoji48
     {:color (if dark?
               colors/white
@@ -36,11 +36,11 @@
         clicks-positive? (pos? numeric-value)]
     [rn/touchable-opacity {:on-press on-press
                            :style (merge reaction-styling
-                                         (cond-> {:background-color   (if dark?
-                                                                        (if neutral? colors/neutral-70 colors/neutral-90)
-                                                                        (if neutral? colors/neutral-30 colors/neutral-10))}
-                                           (and dark? (not neutral?)) (assoc :border-color
-                                                                             colors/neutral-70
+                                         (cond-> {:background-color
+                                                  (if dark?
+                                                    (if neutral? colors/neutral-70 colors/neutral-90)
+                                                    (if neutral? colors/neutral-30 colors/neutral-10))}
+                                           (and dark? (not neutral?)) (assoc :border-color colors/neutral-70
                                                                              :border-width 1)
                                            (and (not dark?) (not neutral?)) (assoc :border-color colors/neutral-30
                                                                                    :border-width 1)))}
@@ -48,5 +48,3 @@
       (str emoji (if clicks-positive?
                    (str " " numeric-value)
                    ""))]]))
-
-

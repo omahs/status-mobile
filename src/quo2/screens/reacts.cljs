@@ -21,9 +21,6 @@
                              :value "Laugh"}
                             {:key :main-icons/sad16
                              :value "Sad"}]}
-                 {:label "Dark"
-                  :key   :dark?
-                  :type  :boolean}
                  {:label "Neutral"
                   :key   :neutral?
                   :type  :boolean}])

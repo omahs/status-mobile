@@ -1,36 +1,39 @@
 (ns quo2.components.reacts
   (:require [quo.core :as quo]
-            [status-im.ui.components.icons.icons :as icons]
             [quo.react-native :as rn]
-            [quo2.foundations.colors :as colors]))
+            [quo.theme :as theme]
+            [quo2.foundations.colors :as colors]
+            [status-im.ui.components.icons.icons :as icons]))
 
 (def reaction-styling
-  {:display :flex
-   :flex-direction :row
+  {:flex-direction :row
+   :justify-content :center
+   :align-items :center
    :padding-vertical 3
-   :padding-horizontal 8
-   :margin-top 25
-   :border-radius 10
+   :padding-horizontal 8 
+   :border-radius 8
    :gap 4})
 
 (defn open-reactions-menu
-  [{:keys [dark? on-press]}]
-  [rn/touchable-opacity {:on-press on-press
-                         :style (merge reaction-styling
-                                       {:margin-top 25
-                                        :border-width 1
-                                        :border-color (if dark?
-                                                        colors/white-opa-5
-                                                        colors/neutral-80)})}
-   [icons/icon :main-icons/add-reaction-emoji48
-    {:color (if dark?
-              colors/white
-              colors/black)}]])
+  [{:keys [on-press]}]
+  (let [dark? (theme/dark?)]
+    [rn/touchable-opacity {:on-press on-press
+                           :style (merge reaction-styling
+                                         {:margin-top 25
+                                          :border-width 1
+                                          :border-color (if dark?
+                                                          colors/white-opa-5
+                                                          colors/neutral-80)})}
+     [icons/icon :main-icons/add-reaction20
+      {:color (if dark?
+                colors/white
+                colors/black)}]]))
 
 (defn render-react
   "Add your emoji as a param here"
-  [{:keys [emoji clicks dark? neutral? on-press]}]
-  (let [text-color (if dark? colors/white
+  [{:keys [emoji clicks neutral? on-press]}]
+  (let [dark? (theme/dark?)
+        text-color (if dark? colors/white
                        colors/black)
         numeric-value (int clicks)
         clicks-positive? (pos? numeric-value)]
@@ -38,13 +41,26 @@
                            :style (merge reaction-styling
                                          (cond-> {:background-color
                                                   (if dark?
-                                                    (if neutral? colors/neutral-70 colors/neutral-90)
-                                                    (if neutral? colors/neutral-30 colors/neutral-10))}
+                                                    (if neutral?
+                                                      colors/neutral-70
+                                                      "transparent")
+                                                    (if neutral?
+                                                      colors/neutral-30
+                                                      "transparent"))}
                                            (and dark? (not neutral?)) (assoc :border-color colors/neutral-70
                                                                              :border-width 1)
                                            (and (not dark?) (not neutral?)) (assoc :border-color colors/neutral-30
                                                                                    :border-width 1)))}
-     [quo/text {:style {:color text-color}}
-      (str emoji (if clicks-positive?
-                   (str " " numeric-value)
-                   ""))]]))
+     [icons/icon emoji {:color "default"
+                        :width 16
+                        :height 16}]
+     [quo/text {:style {:font-size 13
+                        :font-weight "500"
+                        :line-height 18
+                        :color text-color
+                        :flex-direction :row
+                        :align-items :center
+                        :justify-content :center}}
+      (if clicks-positive?
+        (str " " numeric-value)
+        "")]]))

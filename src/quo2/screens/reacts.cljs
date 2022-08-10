@@ -10,7 +10,17 @@
                   :type  :text}
                  {:label "Emoji"
                   :key   :emoji
-                  :type  :text}
+                  :type  :select
+                  :options [{:key :main-icons/love16
+                             :value "Love"}
+                            {:key :main-icons/thumbs-up16
+                             :value "Thumbs Up"}
+                            {:key :main-icons/thumbs-down16
+                             :value "Thumbs Down"}
+                            {:key :main-icons/laugh16
+                             :value "Laugh"}
+                            {:key :main-icons/sad16
+                             :value "Sad"}]}
                  {:label "Dark"
                   :key   :dark?
                   :type  :boolean}
@@ -19,7 +29,7 @@
                   :type  :boolean}])
 
 (defn cool-preview []
-  (let [state (reagent/atom {})]
+  (let [state (reagent/atom {:emoji :main-icons/love16})]
     (fn []
       [rn/view {:margin-bottom 50
                 :padding       16}

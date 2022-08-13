@@ -1,9 +1,10 @@
 (ns quo2.screens.page-nav
-  (:require [reagent.core :as reagent]
+  (:require [quo.previews.preview :as preview]
             [quo.react-native :as rn]
-            [quo.previews.preview :as preview]
+            [quo.theme :as theme]
+            [quo2.components.page-nav :as quo2]
             [quo2.foundations.colors :as colors]
-            [quo2.components.page-nav :as quo2]))
+            [reagent.core :as reagent]))
 
 (def descriptor [{:label "Align middle-component to the left"
                   :key :align-mid
@@ -24,7 +25,7 @@
                             {:value "Text with one icon"
                              :key :text-with-one-icon}
                             {:value "Text with two icons"
-                             :key :text-with-two-icon}]}
+                             :key :text-with-two-icons}]}
                  {:label "Mid section icon"
                   :key :mid-section-icon
                   :type :select
@@ -48,6 +49,9 @@
                              :key :main-icons/wallet}]}
                  {:label "Mid section description"
                   :key :mid-section-description
+                  :type :text}
+                 {:label "Mid section description color"
+                  :key :mid-section-description-color
                   :type :text}
                  {:label "Mid section description icon"
                   :key :mid-section-description-icon
@@ -88,7 +92,13 @@
 
 
 (defn cool-preview []
-  (let [state (reagent/atom {})]
+  (let [state (reagent/atom {:right-section-icons [{:bg colors/primary-40
+                                                   :icon-color "none"
+                                                   :icon :main-icons/placeholder20}]})
+        current-right-icons (:right-section-icons state)
+        right-icon {:bg colors/primary-40
+                    :icon-color "none"
+                    :icon :main-icons/placeholder20}]
     (fn []
       [rn/view {:margin-bottom 50
                 :padding       16}
@@ -97,7 +107,16 @@
        [rn/view {:padding-vertical 60
                  :flex-direction   :row
                  :justify-content  :center}
-        [quo2/page-nav @state]]])))
+        [quo2/page-nav @state]]
+       [rn/touchable-opacity {:style {:width 80
+                                      :height 50}
+                              :on-press (fn [_]
+                                          (swap! state update-in [:right-section-icons] conj right-icon))}
+        [rn/text {:style
+                  {:color (if (theme/dark?)
+                            colors/white
+                            colors/black)}}
+         "Add right icon"]]])))
 
 (defn preview-page-nav []
   [rn/view {:background-color (colors/theme-colors colors/white

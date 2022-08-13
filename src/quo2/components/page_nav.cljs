@@ -10,11 +10,17 @@
    :justify-content :center
    :align-items :center})
 
+(def align-left
+  (merge centrify
+         {:align-items :flex-start}))
+
 (defn mid-section
-[{:keys [mid-section-type mid-section-main-text mid-section-right-icon mid-section-icon mid-section-main-text-icon-color mid-section-left-icon]}]
+[{:keys [mid-section-type left-align? mid-section-description mid-section-description-user-icon mid-section-description-icon mid-section-main-text mid-section-right-icon mid-section-icon mid-section-main-text-icon-color mid-section-left-icon] :or {left-align? false}}]
 [rn/view {:id "mid"
           :style (merge
-                  centrify
+                  (if left-align?
+                    align-left
+                    centrify)
                   {:flex 1})}
  (case mid-section-type
    :text-only [rn/text mid-section-main-text]
@@ -48,7 +54,35 @@
                          [icons/icon (keyword "main-icons" (name mid-section-icon))
                           {:width 16
                            :height 16
-                           :color mid-section-main-text-icon-color}]]])])
+                           :color mid-section-main-text-icon-color}]]]
+   :text-with-description [rn/view (assoc centrify
+                                          :flex-direction :row
+                                          :margin-horizontal 2)
+                           (when mid-section-description-user-icon
+                             [rn/image {:source {:uri mid-section-description-user-icon}
+                                        :style {:width 32
+                                                :height 32
+                                                :border-radius 32
+                                                :margin-right 4}}])
+                           
+                           [rn/view {:style {:flex-direction :column}}
+                            [rn/text {:style
+                                     {:font-size 15
+                                      :font-weight "600"}}
+                            mid-section-main-text]
+                           [rn/view {:style (assoc centrify :flex-direction :row)}
+                            (when mid-section-description-icon
+                              [icons/icon (keyword "main-icons" (name mid-section-description-icon))
+                               {:width 16
+                                :height 16
+                                :color mid-section-main-text-icon-color}])
+                            [rn/text {:style
+                                      {:padding-horizontal 4
+                                       :font-size 13
+                                       :font-weight "500"
+                                       :line-height 18
+                                       :color colors/neutral-80}}
+                             mid-section-description]]]])])
 
 (def icon-styles (merge
                   centrify
@@ -56,44 +90,63 @@
                    :height 32
                    :border-radius 10}))
 
+(defn right-section-icon
+  [props {:keys [bg icon icon-color]}]
+  [rn/view {:style (merge
+                    icon-styles
+                    {:background-color bg}
+                    props)}
+   [icons/icon icon {:color icon-color}]])
+
 (defn page-nav
-  [{:keys [left-section mid-section right-section opts] :or {opts {:align-mid :none
-                                                                   :page-nav-color "red"
-                                                                   :page-nav-background-uri ""}
-                                                             mid-section {:mid-section-type :text-with-two-icons
-                                                                          :mid-section-icon :wallet
-                                                                          :mid-section-main-text "# general"
-                                                                          :mid-section-left-icon :wallet 
-                                                                          :mid-section-right-icon :wallet
-                                                                          :mid-section-main-text-icon :wallet
-                                                                          :mid-section-main-text-icon-color "nil"
-                                                                          :mid-section-sub-text ""
-                                                                          :mid-section-sub-text-icon :locked
-                                                                          :mid-section-user-icon-uri "wow"
-                                                                          :mid-section-align-text :row}
-                                                             left-section {:left-section-icon :peach20
-                                                                           :left-section-icon-color "none"
-                                                                           :left-section-icon-bg-color colors/neutral-30}
-                                                             right-section {:right-section-icons [{:icon-bg-color colors/primary-40
-                                                                                                   :icon-color "none"
-                                                                                                   :icon-name "peach"}]}}}]
+  [{:keys [left-section-props mid-section-props right-section-props opts] :or {opts {:align-mid :none
+                                                                                     :page-nav-color "red"
+                                                                                     :page-nav-background-uri ""}
+                                                                               mid-section-props {:mid-section-type :text-with-description
+                                                                                                  :mid-section-icon :wallet
+                                                                                                  :mid-section-main-text "# general"
+                                                                                                  :mid-section-left-icon :wallet
+                                                                                                  :mid-section-right-icon :wallet
+                                                                                                  :mid-section-description "Description"
+                                                                                                  :mid-section-description-icon :placeholder20
+                                                                                                  :mid-section-description-user-icon "https://i.picsum.photos/id/810/200/300.jpg?hmac=HgwlXd-OaLOAqhGyCiZDUb_75EgUI4u0GtS7nfgxd8s"
+                                                                                                  :mid-section-main-text-icon :wallet
+                                                                                                  :mid-section-main-text-icon-color "nil"
+                                                                                                  :mid-section-sub-text ""
+                                                                                                  :mid-section-sub-text-icon :locked
+                                                                                                  :mid-section-user-icon-uri "wow"
+                                                                                                  :mid-section-align-text :row}
+                                                                               left-section-props {:left-section-icon :peach20
+                                                                                                   :left-section-icon-color "none"
+                                                                                                   :left-section-icon-bg-color colors/neutral-30}
+                                                                               right-section-props {:right-section-icons [{:bg colors/primary-40
+                                                                                                                           :icon-color "none"
+                                                                                                                           :icon :main-icons/placeholder20}
+                                                                                                                          {:bg colors/primary-40
+                                                                                                                           :icon-color "none"
+                                                                                                                           :icon :main-icons/placeholder20}
+                                                                                                                          {:bg colors/primary-40
+                                                                                                                           :icon-color "none"
+                                                                                                                           :icon :main-icons/placeholder20}]}}}]
   (let [{:keys [height width]} (dimensions/window)
-        put-middle-section-on-left? (or (= (:align-mid opts)
-                                           :left)
-                                        (> (count right-section) 1))
-        _ (prn put-middle-section-on-left?)
+        put-middle-section-on-left? (or true
+                                     (= (:align-mid opts)
+                                        :left)
+                                     (> (count right-section-props) 1)) 
         {:keys [color
                 page-nav-background-uri
                 page-nav-color]} opts
-        {:keys [left-section-icon left-section-icon-color left-section-icon-bg-color]} left-section
-        right-icons (:right-section-icons right-section)
+        {:keys [left-section-icon left-section-icon-color left-section-icon-bg-color]} left-section-props
+        right-icons (:right-section-icons right-section-props)
         {:keys [mid-section-type mid-section-icon
                 mid-section-main-text mid-section-text-icon
-                mid-section-main-text-icon-color
-                mid-section-left-icon
-                mid-section-right-icon
+                mid-section-description-icon
+                mid-section-description-user-icon
+                mid-section-main-text-icon-color mid-section-description
+                mid-section-left-icon mid-section-right-icon
                 mid-section-sub-text mid-section-sub-text-icon
-                mid-section-user-icon-url mid-section--align-text]} mid-section]
+                mid-section-user-icon-url mid-section--align-text]} mid-section-props
+        right-section-icons (:right-section-icons right-section-props)]
     [rn/view {:style
               (cond->
                {:display :flex
@@ -106,16 +159,23 @@
                 (string/blank? page-nav-background-uri) (assoc :background-color page-nav-color)
                 (string/blank? page-nav-color) (assoc :background page-nav-background-uri))}
      [rn/view {:id "leftsection"
-               :style {:flex 1}}
+               :style {:flex 1
+                       :flex-direction :row
+                       :align-items :center}}
       [rn/view {:style (merge
                         icon-styles
-                        {:background-color left-section-icon-bg-color})}
+                        {:background-color left-section-icon-bg-color}
+                        (when put-middle-section-on-left? {:margin-right 5}))}
        [icons/icon :main-icons/placeholder20 {:color "nil"}]]
       (when put-middle-section-on-left?
-        [mid-section {:mid-section-type mid-section-type
+        [mid-section {:left-align? true
+                      :mid-section-type mid-section-type
                       :mid-section-main-text mid-section-main-text
                       :mid-section-right-icon mid-section-right-icon
                       :mid-section-icon mid-section-icon
+                      :mid-section-description mid-section-description
+                      :mid-section-description-icon mid-section-description-icon
+                      :mid-section-description-user-icon mid-section-description-user-icon
                       :mid-section-main-text-icon-color mid-section-main-text-icon-color
                       :mid-section-left-icon mid-section-left-icon}])]
      (when-not put-middle-section-on-left?
@@ -132,12 +192,9 @@
                         {:flex-direction :row
                          :flex 1})
                        :justify-content :flex-end)}
-      [rn/view {:style (merge
-                        icon-styles
-                        {:background-color colors/neutral-10
-                         :margin-right 8})}
-       [icons/icon :main-icons/placeholder20 {:color "nil"}]]
-      [rn/view {:style (merge
-                        icon-styles
-                        {:background-color colors/neutral-10})}
-       [icons/icon :main-icons/placeholder20 {:color "nil"}]]]]))
+      (let [last-icon-idx (- (count right-section-icons) 1)] 
+        (map-indexed (fn [idx icon]
+                       ^{:key idx}
+                       [right-section-icon (when-not (= idx last-icon-idx)
+                                             {:margin-right 8}) icon])
+                     right-section-icons))]]))

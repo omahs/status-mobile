@@ -90,7 +90,6 @@
                   :key :left-section-icon-bg-color
                   :type :text}])
 
-
 (defn cool-preview []
   (let [state (reagent/atom {:right-section-icons [{:bg colors/primary-40
                                                     :icon-color "none"

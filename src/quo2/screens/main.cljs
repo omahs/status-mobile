@@ -28,6 +28,9 @@
               {:name      :quo2-page-nav
                :insets    {:top false}
                :component page-nav/preview-page-nav}
+              {:name      :quo2-page-nav
+               :insets    {:top false}
+               :component page-nav/preview-page-nav}
               {:name      :quo2-segmented
                :insets    {:top false}
                :component segmented/preview-segmented}

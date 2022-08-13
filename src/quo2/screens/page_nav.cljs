@@ -76,7 +76,7 @@
                  {:label "Mid section user icon URL"
                   :key :mid-section-user-icon-uri
                   :type :text}
-                 {:label "left section icon"
+                 {:label "Left section icon"
                   :key :left-section-icon
                   :type :select
                   :options [{:value "Placeholder"
@@ -93,9 +93,8 @@
 
 (defn cool-preview []
   (let [state (reagent/atom {:right-section-icons [{:bg colors/primary-40
-                                                   :icon-color "none"
-                                                   :icon :main-icons/placeholder20}]})
-        current-right-icons (:right-section-icons state)
+                                                    :icon-color "none"
+                                                    :icon :main-icons/placeholder20}]})
         right-icon {:bg colors/primary-40
                     :icon-color "none"
                     :icon :main-icons/placeholder20}]

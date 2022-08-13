@@ -1,6 +1,7 @@
 (ns quo2.components.page-nav
   (:require [clojure.string :as string]
             [quo.react-native :as rn]
+            [quo.theme :as theme]
             [quo2.foundations.colors :as colors]
             [status-im.ui.components.icons.icons :as icons]
             [status-im.utils.dimensions :as dimensions]))
@@ -14,94 +15,122 @@
   (merge centrify
          {:align-items :flex-start}))
 
-(defn mid-section
-[{:keys [mid-section-type left-align? mid-section-description mid-section-description-color mid-section-description-user-icon mid-section-description-icon mid-section-main-text mid-section-right-icon mid-section-icon mid-section-main-text-icon-color mid-section-left-icon] :or {left-align? false}}]
-[rn/view {:id "mid"
-          :style (merge
-                  (if left-align?
-                    align-left
-                    centrify)
-                  {:flex 1})}
- (case mid-section-type
-   :text-only [rn/text mid-section-main-text]
-   :text-with-two-icons [rn/view (assoc
-                                  centrify
-                                  :flex-direction :row)
-                         [icons/icon mid-section-left-icon
-                          {:width 16
-                           :height 16
-                           :color mid-section-main-text-icon-color}]
-                         [rn/text {:style
-                                   {:padding-horizontal 4
-                                    :font-size 15
-                                    :font-weight "600"}}
-                          mid-section-main-text]
-                         [rn/view {:style {:font-size 15}}
-                          [icons/icon mid-section-right-icon
-                           {:width 16
-                            :height 16
-                            :color mid-section-main-text-icon-color}]]]
-   :text-with-one-icon [rn/view (assoc centrify
-                                       :flex-direction :row)
-                        [rn/text {:style
-                                  {:padding-horizontal 4
-                                   :font-size 15
-                                   :font-weight "600"}}
-                         mid-section-main-text]
-                        [rn/view {:style {:font-size 15}}
-                         [icons/icon mid-section-icon
-                          {:width 16
-                           :height 16
-                           :color mid-section-main-text-icon-color}]]]
-   :text-with-description [rn/view (assoc centrify
-                                          :flex-direction :row
-                                          :margin-horizontal 2)
-                           (when mid-section-description-user-icon
-                             [rn/image {:source {:uri mid-section-description-user-icon}
-                                        :style {:width 32
-                                                :height 32
-                                                :border-radius 32
-                                                :margin-right 4}}]) 
-                           [rn/view {:style {:flex-direction :column}}
-                            [rn/text {:style
-                                      {:font-size 15
-                                       :font-weight "600"}}
-                             mid-section-main-text]
-                            (when mid-section-description
-                              [rn/view {:style (assoc centrify :flex-direction :row)}
-                               (when mid-section-description-icon
-                                 [icons/icon mid-section-description-icon
-                                  {:width 16
-                                   :height 16
-                                   :color mid-section-main-text-icon-color}])
-                               [rn/text {:style
-                                         {:padding-horizontal 4
-                                          :font-size 13
-                                          :font-weight "500"
-                                          :line-height 18
-                                          :color mid-section-description-color}}
-                                mid-section-description]])]])])
-
 (def icon-styles (merge
                   centrify
                   {:width 32
                    :height 32
                    :border-radius 10}))
 
+(defn mid-section
+[{:keys [mid-section-type left-align? mid-section-description mid-section-description-color mid-section-description-user-icon mid-section-description-icon mid-section-main-text mid-section-right-icon mid-section-icon mid-section-main-text-icon-color mid-section-left-icon] :or {left-align? false}}]
+(let [text-color (if (theme/dark?)
+                   colors/white
+                   colors/black)
+      text-secondary-color (if (theme/dark?)
+                             colors/neutral-40
+                             colors/neutral-50)]
+  [rn/view {:id "mid"
+            :style (merge
+                    (if left-align?
+                      align-left
+                      centrify)
+                    {:flex 1})}
+   (case mid-section-type
+     :text-only [rn/text {:style {:color text-color}} mid-section-main-text]
+     :text-with-two-icons [rn/view (assoc
+                                    centrify
+                                    :flex-direction :row
+                                    :width 32
+                                    :height 32)
+                           [icons/icon mid-section-left-icon
+                            {:width 20
+                             :height 20
+                             :color mid-section-main-text-icon-color}]
+                           [rn/text {:style
+                                     {:padding-horizontal 4
+                                      :color text-color
+                                      :font-size 15
+                                      :font-weight "600"}}
+                            mid-section-main-text]
+                           [rn/view {:style {:font-size 15
+                                             :width 32
+                                             :height 32}}
+                            [icons/icon mid-section-right-icon
+                             {:width 20
+                              :height 20
+                              :color mid-section-main-text-icon-color}]]]
+     :text-with-one-icon [rn/view (assoc centrify
+                                         :flex-direction :row
+                                         :padding-left 5
+                                         :padding-top 8
+                                         :padding-right 5
+                                         :padding-bottom 12)
+                          [rn/text {:style
+                                    {:padding-horizontal 4
+                                     :font-size 15
+                                     :color text-color
+                                     :font-weight "600"}}
+                           mid-section-main-text]
+                          [rn/view {:style (merge 
+                                            (dissoc icon-styles :border-radius)
+                                            {:font-size 15
+                                            :width 32
+                                            :height 32})}
+                           [icons/icon mid-section-icon
+                            {:width 20
+                             :height 20
+                             :color mid-section-main-text-icon-color}]]]
+     :text-with-description [rn/view (assoc centrify
+                                            :flex-direction :row
+                                            :margin-horizontal 2)
+                             (when mid-section-description-user-icon
+                               [rn/image {:source {:uri mid-section-description-user-icon}
+                                          :style {:width 32
+                                                  :height 32
+                                                  :border-radius 32
+                                                  :margin-right 4}}])
+                             [rn/view {:style {:flex-direction :column}}
+                              [rn/text {:style
+                                        {:font-size 15
+                                         :color text-color
+                                         :text-align :left
+                                         :font-weight "600"}}
+                               mid-section-main-text]
+                              (when mid-section-description
+                                [rn/view {:style {:flex-direction :row}}
+                                 (when mid-section-description-icon
+                                   [icons/icon mid-section-description-icon
+                                    {:width 16
+                                     :height 16
+                                     :color text-secondary-color}])
+                                 [rn/text {:style
+                                           {:padding-right 4
+                                            :margin-left 2
+                                            :font-size 13
+                                            :text-align :left
+                                            :font-weight "500"
+                                            :line-height 18
+                                            :color text-secondary-color}}
+                                  mid-section-description]])]])]))
+
 (defn right-section-icon
   [props {:keys [bg icon icon-color]}]
   [rn/view {:style (merge
                     icon-styles
-                    {:background-color bg}
+                    {:background-color bg
+                     :width 32
+                     :height 32}
                     props)}
-   [icons/icon icon {:color icon-color}]])
+   [icons/icon icon {:color icon-color
+                     :width 20
+                     :height 20}]])
 
 (defn page-nav
   [{:keys [align-mid page-nav-color page-nav-background-uri mid-section-type mid-section-icon mid-section-main-text mid-section-left-icon
            mid-section-right-icon mid-section-description mid-section-description-color mid-section-description-icon mid-section-description-user-icon
            mid-section-main-text-icon-color left-section-icon left-section-icon-color
            left-section-icon-bg-color right-section-icons] :or {align-mid false
-                                                                page-nav-color "red"
+                                                                page-nav-color :transparent
                                                                 page-nav-background-uri ""
                                                                 mid-section-type :text-with-description
                                                                 mid-section-icon :wallet
@@ -146,9 +175,13 @@
                        :align-items :center}}
       [rn/view {:style (merge
                         icon-styles
-                        {:background-color left-section-icon-bg-color}
+                        {:background-color left-section-icon-bg-color
+                         :width 32
+                         :height 32}
                         (when put-middle-section-on-left? {:margin-right 5}))}
-       [icons/icon left-section-icon {:color left-section-icon-color}]]
+       [icons/icon left-section-icon {:color left-section-icon-color
+                                      :width 20
+                                      :height 20}]]
       (when put-middle-section-on-left?
         [mid-section {:left-align? true
                       :mid-section-type mid-section-type

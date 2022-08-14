@@ -22,7 +22,7 @@
                    :border-radius 10}))
 
 (defn mid-section
-  [{:keys [mid-section-type left-align? mid-section-description mid-section-description-color mid-section-description-user-icon mid-section-description-icon mid-section-main-text mid-section-right-icon mid-section-icon mid-section-main-text-icon-color mid-section-left-icon] :or {left-align? false}}]
+  [{:keys [mid-section-type left-align? mid-section-description mid-section-description-user-icon mid-section-description-icon mid-section-main-text mid-section-right-icon mid-section-icon mid-section-main-text-icon-color mid-section-left-icon] :or {left-align? false}}]
   (let [text-color (if (theme/dark?)
                      colors/white
                      colors/black)

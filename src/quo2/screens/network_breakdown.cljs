@@ -5,31 +5,31 @@
             [quo2.foundations.colors :as colors]
             [quo2.components.network-breakdown :as quo2]))
 
-(def descriptor [{:label "Size"
-                  :key :size
+(def descriptor [{:label "Ethereum Value"
+                  :key :eth-value
+                  :type :text}
+                 {:label "Conversion"
+                  :key :conversion
+                  :type :text}
+                 {:label "Network"
+                  :key :network
+                  :type :text}
+                 {:label "Icon"
+                  :key :icon
                   :type :select
-                  :options [{:key :small
-                             :value "Small"}
-                            {:key :medium
-                             :value "Medium"}
-                            {:key :large
-                             :value "Large"}]}
-                 {:label "Color"
-                  :key   :color
-                  :type  :select
-                  :options
-                  (map
-                   (fn [c]
-                     {:key c
-                      :value c})
-                   (-> colors/customization
-                       :light
-                       keys))}])
+                  :options [{:key :main-icons/arbitrum40
+                             :value "Arbitrum"}
+                            {:key :main-icons/optimism40
+                             :value "Optimism"}
+                            {:key :main-icons/zksync40
+                             :value "ZK Sync"}
+                            {:key :main-icons/arbitrum40
+                             :value "Arbitrum"}
+                            {:key :main-icons/ethereum40
+                             :value "Ethereum"}]}])
 
 (defn cool-preview []
-  (let [state (reagent/atom {:theme :light
-                             :color :purple
-                             :size :small})]
+  (let [state (reagent/atom {})]
     (fn []
       [rn/view {:margin-bottom 50
                 :padding       16}
@@ -38,7 +38,14 @@
        [rn/view {:padding-vertical 60
                  :flex-direction   :row
                  :justify-content  :center}
-        [quo2/network-breakdown @state]]])))
+        [quo2/network-breakdown @state]]
+       [rn/touchable-opacity {:style {:background-color colors/black
+                                      :width 100}
+                              :on-press (fn []
+                                          (swap! state update-in [:network-conversions] conj {:conversion (:conversion @state)
+                                                                                              :icon (:icon @state)
+                                                                                              :network (:network @state)}))}
+        [rn/text {:style {:color colors/white}} "Add current conversion"]]])))
 
 (defn preview-network-breakdown []
   [rn/view {:background-color (colors/theme-colors colors/white

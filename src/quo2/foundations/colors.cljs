@@ -68,6 +68,11 @@
 (def black-opa-80 (alpha black 0.8))
 (def black-opa-90 (alpha black 0.9))
 (def black-opa-95 (alpha black 0.95))
+(def dark-prompt-bg "#1C1C1E")
+(def dark-prompt-title "#9F9FA5")
+(def dark-prompt-button "#8E8E93")
+(def light-prompt-title "#8F8E94")
+(def light-prompt-button "#D5D4DB")
 
 ;;;;White
 (def white "#ffffff")

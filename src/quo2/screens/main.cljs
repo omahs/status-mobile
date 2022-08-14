@@ -14,8 +14,8 @@
             [quo2.screens.segmented :as segmented]
             [quo2.screens.info-message :as info-message]
             [quo2.screens.information-box :as information-box]
+            [quo2.screens.nfc-prompt :as nfc-prompt]
             [quo.components.safe-area :as safe-area]
-            [quo2.components.nfc-prompt :as nfc-prompt]
             [quo.core :as quo]))
 
 (def screens [{:name      :quo2-texts
@@ -32,7 +32,7 @@
                :component context-tags/preview-context-tags}
               {:name      :quo2-nfc-prompt
                :insets    {:top false}
-               :component nfc-prompt/nfc-prompt}
+               :component nfc-prompt/preview-nfc-prompt}
               {:name      :quo2-group-avatar
                :insets    {:top false}
                :component group-avatar/preview-group-avatar}

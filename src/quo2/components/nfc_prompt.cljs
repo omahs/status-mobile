@@ -37,8 +37,8 @@
                         :margin-top 29}}
        [icons/icon (if success?
                      :main-icons/nfc-prompt-success
-                     (when ready-or-connected? 
-                         :main-icons/nfc-prompt))
+                     (when ready-or-connected?
+                       :main-icons/nfc-prompt))
         {:width 114
          :color "nil"
          :height 114}]

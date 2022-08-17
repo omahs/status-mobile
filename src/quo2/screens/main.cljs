@@ -13,6 +13,7 @@
             [quo2.screens.counter :as counter]
             [quo2.screens.segmented :as segmented]
             [quo2.screens.info-message :as info-message]
+            [quo2.screens.preview-lists :as preview-lists]
             [quo2.screens.information-box :as information-box]
             [quo.components.safe-area :as safe-area]
             [quo.core :as quo]))
@@ -49,7 +50,10 @@
                :component info-message/preview-info-message}
               {:name      :information-box
                :insets    {:top false}
-               :component information-box/preview-information-box}])
+               :component information-box/preview-information-box}
+              {:name      :preview-lists
+               :insets    {:top false}
+               :component preview-lists/preview-info-message}])
 
 (defn theme-switcher []
   [rn/view {:style {:flex-direction   :row

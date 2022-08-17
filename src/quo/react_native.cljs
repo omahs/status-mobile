@@ -6,7 +6,10 @@
             ["@react-native-community/hooks" :as hooks]
             ["react-native-navigation" :refer (Navigation)]
             ["rn-emoji-keyboard" :refer (EmojiKeyboard)]
+            ["@react-native-masked-view/masked-view" :default MaskedView]
             ["react-native-draggable-flatlist" :default DraggableFlatList]))
+
+(def masked-view (reagent/adapt-react-class MaskedView))
 
 (def rn-draggable-flatlist (reagent/adapt-react-class DraggableFlatList))
 
@@ -20,6 +23,8 @@
 
 (def view (reagent/adapt-react-class (.-View ^js rn)))
 (def image (reagent/adapt-react-class (.-Image rn)))
+(def image-background (reagent/adapt-react-class (.-ImageBackground rn)))
+
 (def text (reagent/adapt-react-class (.-Text ^js rn)))
 
 (defn resolve-asset-source [uri] (js->clj (.resolveAssetSource ^js (.-Image ^js rn) uri) :keywordize-keys true))

@@ -327,3 +327,145 @@ class TestProfileGapsCommunityMediumMultipleDevicesMerged(MultipleSharedDeviceTe
             self.errors.append("Message from member is not shown for community channel!")
 
         self.errors.verify_no_errors()
+
+@pytest.mark.xdist_group(name='five_2')
+@marks.medium
+class TestProfileMedium2MultipleDevicesMerged(MultipleSharedDeviceTestCase):
+
+    def prepare_devices(self):
+        self.drivers, self.loop = create_shared_drivers(2)
+        self.device_1, self.device_2 = SignInView(self.drivers[0]), SignInView(self.drivers[1])
+        self.home_1, self.home_2 = self.device_1.create_user(enable_notifications=True), self.device_2.create_user(enable_notifications=True)
+        self.public_key_1, self.default_username_1 = self.home_1.get_public_key_and_username(return_username=True)
+        self.public_key_2, self.default_username_2 = self.home_2.get_public_key_and_username(return_username=True)
+        [home.home_button.click() for home in (self.home_1, self.home_2)]
+
+        self.home_1.just_fyi("Creating 1-1 chats")
+        self.chat_1 = self.home_1.add_contact(self.public_key_2)
+        self.first_message = 'first message'
+        self.chat_2 = self.home_2.add_contact(self.public_key_1)
+        [home.home_button.click() for home in (self.home_1, self.home_2)]
+
+        picture_user_1, picture_user_2 = 'sauce_logo.png', 'sauce_logo_red.png'
+        self.profile_picture_user_1, self.profile_picture_user_2 = 'logo_new.png', 'logo_new'
+
+        self.profile_1 = self.home_1.profile_button.click()
+        self.profile_2 = self.home_2.profile_button.click()
+
+        for profile in self.profile_1, self.profile_2:
+            if profile is self.profile_1:
+                profile.edit_profile_picture(file_name=picture_user_1)
+            else:
+                profile.edit_profile_picture(file_name=picture_user_2)
+            profile.home_button.click()
+
+    @marks.testrail_id(702281)
+    def test_profile_show_profile_picture_and_online_indicator_settings(self):
+
+        self.home_2.just_fyi('Check profile image is in mentions')
+        one_to_one_chat_2 = self.home_2.get_chat(self.default_username_1).click()
+        one_to_one_chat_2.chat_message_input.set_value('@' + self.default_username_1)
+        one_to_one_chat_2.chat_message_input.click()
+        if one_to_one_chat_2.user_profile_image_in_mentions_list(
+                self.default_username_1).is_element_image_similar_to_template(self.profile_picture_user_1):
+            self.errors.append('Profile picture is updated in 1-1 chat mentions list of contact not in Contacts list')
+        self.errors.verify_no_errors()
+
+
+
+"""
+        profile_1.just_fyi('Check profile image is in mentions because now user was added in contacts')
+        one_to_one_chat_2.add_to_contacts.click()
+        one_to_one_chat_2.send_message("hey")
+        one_to_one_chat_2.chat_message_input.set_value('@' + self.default_username_1)
+        one_to_one_chat_2.chat_message_input.click()
+        if not one_to_one_chat_2.user_profile_image_in_mentions_list(
+                self.default_username_1).is_element_image_similar_to_template(logo_default):
+            self.errors.append('Profile picture was not updated in 1-1 chat mentions list')
+        self.home_1.reopen_app()
+        one_to_one_chat_2.get_back_to_home_view()
+
+        profile_1.just_fyi('Check profile image is updated in chat views')
+        profile_2 = one_to_one_chat_2.profile_button.click()
+        profile_2.contacts_button.click()
+        profile_2.element_by_text(self.default_username_1).click()
+        profile_2.online_indicator.wait_for_visibility_of_element(180)
+        if not profile_2.profile_picture.is_element_image_similar_to_template('new_profile_online.png'):
+            self.errors.append('Profile picture was not updated on user Profile view')
+        profile_2.close_button.click()
+        self.home_2.home_button.double_click()
+        if not self.home_2.get_chat(self.default_username_1).chat_image.is_element_image_similar_to_template(
+                logo_chats):
+            self.errors.append('User profile picture was not updated on Chats view')
+
+        profile_1.just_fyi('Check profile image updated in user profile view in Group chat views')
+        group_chat_message = 'wuuuut'
+        self.home_2.get_chat(self.group_chat_name).click()
+        self.group_chat_2.send_message('Message', wait_chat_input_sec=10)
+        group_chat_1 = self.home_1.get_chat(self.group_chat_name).click()
+        group_chat_1.send_message(group_chat_message)
+        self.group_chat_2.chat_element_by_text(group_chat_message).wait_for_element(20)
+        if not self.group_chat_2.chat_element_by_text(
+                group_chat_message).member_photo.is_element_image_similar_to_template(
+            logo_default):
+            self.errors.append('User profile picture was not updated in message Group chat view')
+        self.home_2.put_app_to_background()
+
+        profile_1.just_fyi('Check profile image updated in group chat invite')
+        self.home_1.get_back_to_home_view()
+        new_group_chat = 'new_gr'
+        self.home_2.click_system_back_button()
+        self.home_2.open_notification_bar()
+        self.home_1.create_group_chat(user_names_to_add=[self.default_username_2], group_chat_name=new_group_chat)
+
+        invite = self.group_chat_2.pn_invited_to_group_chat(self.default_username_1, new_group_chat)
+        pn = self.home_2.get_pn(invite)
+        if pn:
+            if not pn.group_chat_icon.is_element_image_similar_to_template(logo_group):
+                self.errors.append("Group chat invite is not updated with custom logo!")
+            pn.click()
+        else:
+            self.errors.append("No invite PN is arrived!")
+            self.home_2.click_system_back_button(2)
+
+        profile_1.just_fyi('Check profile image updated in on login view')
+        self.home_1.profile_button.click()
+        profile_1.logout()
+        sign_in_1 = self.home_1.get_sign_in_view()
+        if not sign_in_1.get_multiaccount_by_position(1).account_logo.is_element_image_similar_to_template(
+                logo_default):
+            self.errors.append('User profile picture was not updated on Multiaccounts list select login view')
+        sign_in_1.element_by_text(self.default_username_1).click()
+        if not sign_in_1.get_multiaccount_by_position(1).account_logo.is_element_image_similar_to_template(
+                logo_default):
+            self.errors.append('User profile picture was not updated on account login view')
+        sign_in_1.password_input.set_value(common_password)
+        sign_in_1.sign_in_button.click()
+
+        profile_1.just_fyi('Remove user from contact and check there is no profile image displayed')
+        self.home_2.profile_button.double_click()
+        profile_2.contacts_button.click()
+        profile_2.element_by_text(self.default_username_1).click()
+        one_to_one_chat_2.remove_from_contacts.click()
+        # Send message to User 2 so update of profile image picked up
+        group_chat_message = "woho"
+        group_chat_1 = self.home_1.get_chat(self.group_chat_name).click()
+        group_chat_1.send_message(group_chat_message)
+        one_to_one_chat_2.get_back_to_home_view()
+        one_to_one_chat_2.home_button.double_click()
+        if self.home_2.get_chat(self.default_username_1).chat_image.is_element_image_similar_to_template(logo_default):
+            self.errors.append('User profile picture is not default to default after user removed from Contacts')
+
+        profile_2.just_fyi('Enable to see profile image from "Everyone" setting')
+        self.home_2.profile_button.double_click()
+        profile_2.privacy_and_security_button.click()
+        profile_2.show_profile_pictures_of.scroll_and_click()
+        profile_2.element_by_translation_id("everyone").click()
+        group_chat_1.send_message(group_chat_message)
+        profile_2.home_button.click(desired_view='home')
+        if not self.home_2.get_chat(self.default_username_1).chat_image.is_element_image_similar_to_template(
+                logo_chats):
+            self.errors.append('User profile picture is not returned to default after user removed from Contacts')
+        self.errors.verify_no_errors()
+
+"""

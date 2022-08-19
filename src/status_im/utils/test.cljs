@@ -41,6 +41,8 @@
                                     config
                                     accounts-data))
 
+            :logout (fn []
+                      (.logout native-status))
             :generateAliasAndIdenticonAsync (fn [seed callback]
                                               (let [generated-identicon (.identicon native-status seed)
                                                     generated-alias (.generateAlias native-status seed)]
@@ -50,6 +52,16 @@
                                                        (.multiAccountGenerateAndDeriveAddresses
                                                         native-status
                                                         json)))
+            :multiAccountLoadAccount (fn [json callback]
+                                       (callback
+                                        (.multiAccountLoadAccount
+                                         native-status
+                                         json)))
+            :multiAccountDeriveAddresses (fn [json callback]
+                                           (callback
+                                            (.multiAccountDeriveAddresses
+                                             native-status
+                                             json)))
             :initKeystore (fn [key-uid callback]
                             (callback
                              (.initKeystore

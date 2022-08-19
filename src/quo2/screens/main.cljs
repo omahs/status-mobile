@@ -8,8 +8,13 @@
             [quo2.screens.tabs :as tabs]
             [quo2.screens.page-nav :as page-nav]
             [quo2.screens.status-tags :as status-tags]
+            [quo2.screens.context-tags :as context-tags]
+            [quo2.screens.group-avatar :as group-avatar]
+            [quo2.screens.activity-logs :as activity-logs]
             [quo2.screens.counter :as counter]
             [quo2.screens.segmented :as segmented]
+            [quo2.screens.info-message :as info-message]
+            [quo2.screens.information-box :as information-box]
             [quo.components.safe-area :as safe-area]
             [quo.core :as quo]))
 
@@ -22,6 +27,15 @@
               {:name      :quo2-status-tags
                :insets    {:top false}
                :component status-tags/preview-status-tags}
+              {:name      :quo2-context-tags
+               :insets    {:top false}
+               :component context-tags/preview-context-tags}
+              {:name      :quo2-group-avatar
+               :insets    {:top false}
+               :component group-avatar/preview-group-avatar}
+              {:name      :quo2-activity-logs
+               :insets    {:top false}
+               :component activity-logs/preview-activity-logs}
               {:name      :quo2-tabs
                :insets    {:top false}
                :component tabs/preview-tabs}
@@ -33,7 +47,13 @@
                :component segmented/preview-segmented}
               {:name      :quo2-counter
                :insets    {:top false}
-               :component counter/preview-counter}])
+               :component counter/preview-counter}
+              {:name      :info-message
+               :insets    {:top false}
+               :component info-message/preview-info-message}
+              {:name      :information-box
+               :insets    {:top false}
+               :component information-box/preview-information-box}])
 
 (defn theme-switcher []
   [rn/view {:style {:flex-direction   :row

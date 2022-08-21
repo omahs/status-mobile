@@ -5,14 +5,18 @@
 
 (defn network-breakdown
   [{:keys [eth-value network-conversions]}]
-  [rn/view {:style {:background-color colors/neutral-95
+  [rn/view {:style {:background-color (colors/theme-colors 
+                                       colors/white
+                                       colors/neutral-95)
                     :padding 6}}
    [rn/view {:style {:border-bottom-width 1
                      :border-bottom-color colors/neutral-70
                      :padding-vertical 10}}
     [rn/text {:style {:font-size 18
                       :font-weight "600"
-                      :color colors/white}}
+                      :color (colors/theme-colors 
+                              colors/black
+                              colors/white)}}
      (str eth-value " ETH")]]
    [rn/scroll-view {:horizontal true
                     :style {:padding-vertical 18
@@ -30,7 +34,9 @@
                              :justify-content :space-between}}
             [rn/view {:flex-direction :row
                       :align-items :center}
-             [rn/text {:style {:color colors/white}}
+             [rn/text {:style {:color (colors/theme-colors
+                                       colors/black
+                                       colors/white)}}
               [icons/icon icon
                {:width 12
                 :color "nil"
@@ -43,5 +49,7 @@
                                 :border-right-color colors/neutral-50
                                 :height "50%"}}])]
            [rn/text {:style {:margin-left 12
-                             :color colors/white}} " on " network]]])
+                             :color (colors/theme-colors 
+                                     colors/black
+                                     colors/white)}} " on " network]]])
        network-conversions))]])

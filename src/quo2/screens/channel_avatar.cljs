@@ -5,19 +5,13 @@
             [quo2.foundations.colors :as colors]
             [quo2.components.channel-avatar :as quo2]))
 
-(def descriptor [{:label "Size"
+(def descriptor [{:label "Big?"
                   :key :big?
                   :type :boolean}
-                 {:label "X"
-                  :key :x
-                  :type :text}
-                 {:label "Y"
-                  :key :y
-                  :type :text}
                  {:label "Dark"
                   :key :dark?
                   :type :boolean}
-                 {:label "Color"
+                 {:label "Icon color"
                   :key :icon-color
                   :type :text}
                  {:label "Lock status"
@@ -30,7 +24,7 @@
                  {:label "Icon"
                   :key :icon
                   :type :select
-                  :options [{:key   :main-icons/peach16
+                  :options [{:key   :main-icons/peach20
                              :value "Peach"}
                             {:key   :main-icons/wallet
                              :value "Wallet"}
@@ -38,12 +32,10 @@
                              :value "Play"}]}])
 
 (defn cool-preview []
-  (let [state (reagent/atom {:x 20
-                             :y 50
-                             :big? true
+  (let [state (reagent/atom {:big? true
                              :dark? true
-                             :lock-status :locked
-                             :icon "peach16"})]
+                             :lock-status :none
+                             :icon :main-icons/peach20})]
     (fn []
       [rn/view {:margin-bottom 50
                 :padding       16}

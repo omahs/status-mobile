@@ -5,7 +5,7 @@
 
 (defn network-breakdown
   [{:keys [eth-value network-conversions]}]
-  [rn/view {:style {:background-color (colors/theme-colors 
+  [rn/view {:style {:background-color (colors/theme-colors
                                        colors/white
                                        colors/neutral-95)
                     :padding 6}}
@@ -14,7 +14,7 @@
                      :padding-vertical 10}}
     [rn/text {:style {:font-size 18
                       :font-weight "600"
-                      :color (colors/theme-colors 
+                      :color (colors/theme-colors
                               colors/black
                               colors/white)}}
      (str eth-value)]]
@@ -49,7 +49,7 @@
                                 :border-right-color colors/neutral-50
                                 :height "50%"}}])]
            [rn/text {:style {:margin-left 12
-                             :color (colors/theme-colors 
+                             :color (colors/theme-colors
                                      colors/black
                                      colors/white)}} " on " network]]])
        network-conversions))]])

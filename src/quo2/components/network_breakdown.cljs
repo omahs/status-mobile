@@ -17,7 +17,7 @@
                       :color (colors/theme-colors 
                               colors/black
                               colors/white)}}
-     (str eth-value " ETH")]]
+     (str eth-value)]]
    [rn/scroll-view {:horizontal true
                     :style {:padding-vertical 18
                             :text-align :center}}

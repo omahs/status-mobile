@@ -10,7 +10,7 @@
    :justify-content :center
    :align-items :center
    :padding-vertical 3
-   :padding-horizontal 8 
+   :padding-horizontal 8
    :border-radius 8
    :gap 4})
 
@@ -43,15 +43,15 @@
                                                   (if dark?
                                                     (if neutral?
                                                       colors/neutral-70
-                                                      "transparent")
+                                                      :transparent)
                                                     (if neutral?
                                                       colors/neutral-30
-                                                      "transparent"))}
+                                                      :transparent))}
                                            (and dark? (not neutral?)) (assoc :border-color colors/neutral-70
                                                                              :border-width 1)
                                            (and (not dark?) (not neutral?)) (assoc :border-color colors/neutral-30
                                                                                    :border-width 1)))}
-     [icons/icon emoji {:color "default"
+     [icons/icon emoji {:color "nil"
                         :width 16
                         :height 16}]
      [quo/text {:style {:font-size 13

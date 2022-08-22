@@ -1,5 +1,5 @@
 (ns quo2.components.reacts
-  (:require [quo.core :as quo]
+  (:require [quo2.components.text :as quo2-text]
             [quo.react-native :as rn]
             [quo.theme :as theme]
             [quo2.foundations.colors :as colors]
@@ -11,8 +11,7 @@
    :align-items :center
    :padding-vertical 3
    :padding-horizontal 8
-   :border-radius 8
-   :gap 4})
+   :border-radius 8})
 
 (defn open-reactions-menu
   [{:keys [on-press]}]
@@ -51,16 +50,16 @@
                                                                              :border-width 1)
                                            (and (not dark?) (not neutral?)) (assoc :border-color colors/neutral-30
                                                                                    :border-width 1)))}
-     [icons/icon emoji {:color "nil"
+     [icons/icon emoji {:no-color true
                         :width 16
                         :height 16}]
-     [quo/text {:style {:font-size 13
-                        :font-weight "500"
-                        :line-height 18
-                        :color text-color
-                        :flex-direction :row
-                        :align-items :center
-                        :justify-content :center}}
+     [quo2-text/text {:style {:font-size 13
+                              :font-weight "500"
+                              :line-height 18
+                              :color text-color
+                              :flex-direction :row
+                              :align-items :center
+                              :justify-content :center}}
       (if clicks-positive?
         (str " " numeric-value)
         "")]]))

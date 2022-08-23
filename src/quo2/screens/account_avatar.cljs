@@ -30,7 +30,9 @@
                              :value "Seriously Big!"}]}])
 
 (defn cool-preview []
-  (let [state (reagent/atom {:size :small})]
+  (let [state (reagent/atom {:size :small
+                             :dark? true
+                             :icon :main-icons/wallet})]
     (fn []
       [rn/view {:margin-bottom 50
                 :padding       16}

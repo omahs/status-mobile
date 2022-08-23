@@ -14,7 +14,9 @@
                   :options [{:key   :main-icons/wallet
                              :value "Wallet"}
                             {:key   :main-icons/placeholder
-                             :value "Medium"}]}
+                             :value "Placeholder"}
+                            {:key   :main-icons/peach20
+                             :value "Peach"}]}
                  {:label   "Size"
                   :key     :size
                   :type    :select

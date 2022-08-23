@@ -10,7 +10,11 @@
                   :type    :boolean}
                  {:label   "Icon"
                   :key     :icon
-                  :type    :text}
+                  :type    :select
+                  :options [{:key   :main-icons/wallet
+                             :value "Wallet"}
+                            {:key   :main-icons/placeholder
+                             :value "Medium"}]}
                  {:label   "Size"
                   :key     :size
                   :type    :select

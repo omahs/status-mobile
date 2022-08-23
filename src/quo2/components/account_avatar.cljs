@@ -42,7 +42,7 @@
                       :border-radius avatar-border-radius
                       :justify-content :center
                       :align-items :center}}
-     [icons/icon (keyword (str "main-icons/" icon))
-      {:color "nil"
+     [icons/icon icon
+      {:no-color true
        :container-style {:width  inner-icon-size
                          :height inner-icon-size}}]]))

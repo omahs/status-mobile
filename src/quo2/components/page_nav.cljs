@@ -29,8 +29,7 @@
         text-secondary-color (if (theme/dark?)
                                colors/neutral-40
                                colors/neutral-50)]
-    [rn/view {:id "mid"
-              :style (merge
+    [rn/view {:style (merge
                       (if left-align?
                         align-left
                         centrify)
@@ -46,14 +45,14 @@
                               {:width 20
                                :height 20
                                :color mid-section-main-text-icon-color}]
-                             [rn/text {:style
+                             [rn/text {:size :base
+                                       :weight :font-semi-bold
+                                       :style
                                        {:padding-horizontal 4
-                                        :color text-color
-                                        :font-size 15
-                                        :font-weight "600"}}
+                                        :color text-color}}
                               mid-section-main-text]
-                             [rn/view {:style {:font-size 15
-                                               :width 32
+                             [rn/view {:size 15
+                                       :style {:width 32
                                                :height 32}}
                               [icons/icon mid-section-right-icon
                                {:width 20
@@ -65,15 +64,15 @@
                                            :padding-top 8
                                            :padding-right 5
                                            :padding-bottom 12)
-                            [rn/text {:style
+                            [rn/text {:size :base
+                                      :weight :font-semi-bold
+                                      :style
                                       {:padding-horizontal 4
-                                       :font-size 15
-                                       :color text-color
-                                       :font-weight "600"}}
+                                       :color text-color}}
                              mid-section-main-text]
                             [rn/view {:style (merge
                                               (dissoc icon-styles :border-radius)
-                                              {:font-size 15
+                                              {:size :base
                                                :width 32
                                                :height 32})}
                              [icons/icon mid-section-icon
@@ -90,11 +89,11 @@
                                                     :border-radius 32
                                                     :margin-right 4}}])
                                [rn/view {:style {:flex-direction :column}}
-                                [rn/text {:style
-                                          {:font-size 15
-                                           :color text-color
-                                           :text-align :left
-                                           :font-weight "600"}}
+                                [rn/text {:size :base
+                                          :weight :font-semi-bold
+                                          :style
+                                          {:color text-color
+                                           :text-align :left}}
                                  mid-section-main-text]
                                 (when mid-section-description
                                   [rn/view {:style {:flex-direction :row}}
@@ -103,12 +102,12 @@
                                       {:width 16
                                        :height 16
                                        :color text-secondary-color}])
-                                   [rn/text {:style
+                                   [rn/text {:size :small
+                                             :weight :font-medium
+                                             :style
                                              {:padding-right 4
-                                              :margin-left 2
-                                              :font-size 13
-                                              :text-align :left
-                                              :font-weight "500"
+                                              :margin-left 2 
+                                              :text-align :left 
                                               :line-height 18
                                               :color text-secondary-color}}
                                     mid-section-description]])]])]))
@@ -146,15 +145,8 @@
                                                                 left-section-icon-color "none"
                                                                 left-section-icon-bg-color colors/neutral-30
                                                                 right-section-icons [{:bg colors/primary-40
-                                                                                      :icon-color "none"
-                                                                                      :icon :main-icons/placeholder20}
-                                                                                    ;;  {:bg colors/primary-40
-                                                                                    ;;   :icon-color "none"
-                                                                                    ;;   :icon :main-icons/placeholder20}
-                                                                                    ;;  {:bg colors/primary-40
-                                                                                    ;;   :icon-color "none"
-                                                                                    ;;   :icon :main-icons/placeholder20}
-                                                                                     ]}}]
+                                                                                      :no-color true
+                                                                                      :icon :main-icons/placeholder20}]}}]
   (let [{:keys [height width]} (dimensions/window)
         put-middle-section-on-left? (or (true? align-mid)
                                         (> (count right-section-icons) 1))]
@@ -169,8 +161,7 @@
                 :justify-content :space-between}
                 (string/blank? page-nav-background-uri) (assoc :background-color page-nav-color)
                 (string/blank? page-nav-color) (assoc :background page-nav-background-uri))}
-     [rn/view {:id "leftsection"
-               :style {:flex 1
+     [rn/view {:style {:flex 1
                        :flex-direction :row
                        :align-items :center}}
       [rn/view {:style (merge
@@ -201,8 +192,7 @@
                      :mid-section-icon mid-section-icon
                      :mid-section-main-text-icon-color mid-section-main-text-icon-color
                      :mid-section-left-icon mid-section-left-icon}])
-     [rn/view {:id "rightsection"
-               :style (assoc
+     [rn/view {:style (assoc
                        (merge
                         centrify
                         {:flex-direction :row

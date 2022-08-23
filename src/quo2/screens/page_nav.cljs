@@ -92,10 +92,10 @@
 
 (defn cool-preview []
   (let [state (reagent/atom {:right-section-icons [{:bg colors/primary-40
-                                                    :icon-color "none"
+                                                    :no-color true
                                                     :icon :main-icons/placeholder20}]})
         right-icon {:bg colors/primary-40
-                    :icon-color "none"
+                    :no-color true
                     :icon :main-icons/placeholder20}]
     (fn []
       [rn/view {:margin-bottom 50

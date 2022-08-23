@@ -234,18 +234,6 @@
 
 (defn custom-color [color theme]
   (get-in customization [theme color]))
-=======
-;;;;Purple
-(def purple "#8661C1")
-(def purple-opa-20 (alpha purple 0.2))
-(def purple-opa-50 (alpha purple 0.5))
-(def purple-opa-60 (alpha purple 0.6))
-<<<<<<< HEAD
->>>>>>> b5b4cc16a (account-avatar component)
-=======
-(def customization-purple-60 "#5E478C")
-(def customization-purple-50 "#8661C2")
->>>>>>> 11221aa67 (Fix colors and sizes)
 
 ;;;;Switcher
 (def switcher-background "#040B14")

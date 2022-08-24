@@ -17,6 +17,7 @@
             [quo2.screens.icon-avatar :as icon-avatar]
             [quo2.screens.segmented :as segmented]
             [quo2.screens.info-message :as info-message]
+            [quo2.screens.switcher-cards :as switcher-cards]
             [quo2.screens.information-box :as information-box]
             [quo.components.safe-area :as safe-area]
             [quo.core :as quo]))
@@ -65,7 +66,10 @@
                :component info-message/preview-info-message}
               {:name      :information-box
                :insets    {:top false}
-               :component information-box/preview-information-box}])
+               :component information-box/preview-information-box}
+              {:name      :switcher-cards
+               :insets    {:top false}
+               :component switcher-cards/preview-switcher-cards}])
 
 (defn theme-switcher []
   [rn/view {:style {:flex-direction   :row

@@ -41,6 +41,22 @@
                   :key   :last-message
                   :type  :text}])
 
+(defn test-view []
+  [rn/view  {:style {:flex 1
+                     :align-items :center
+                     :justify-content :center}}
+   [rn/view  {:style {:width 160
+                      :height 90
+                      :borderTopLeftRadius 16
+                      :borderTopRightRadius 16
+                      :overflow :hidden}}
+    [rn/hole-view {:style {:position :absolute
+                           :width    160
+                           :height 160
+                           :borderRadius 16
+                           :backgroundColor "#448EA2"}
+                   :holes [{ :x 0 :y 40 :width 160 :height 100 :borderRadius 16 }]}]]])
+  
 (defn cool-preview []
   (let [state (reagent/atom {:type         :messaging
                              :title        "Alisher Yakupov"
@@ -51,7 +67,9 @@
        [preview/customizer state descriptor]
        [rn/view {:padding-vertical 60
                  :align-items      :center}
-        [switcher-card/card (:type @state) @state]]])))
+        ;;[switcher-card/card (:type @state) @state]
+        [test-view]
+        ]])))
 
 (defn preview-switcher-cards []
   [rn/view {:background-color (colors/theme-colors colors/white colors/neutral-90)

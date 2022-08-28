@@ -410,26 +410,36 @@
   (on-long-press
    (concat
     (when (and outgoing edit-enabled)
-      [{:on-press #(re-frame/dispatch [:chat.ui/edit-message message])
-        :label    (i18n/label :t/edit)
+      [{:type     :main
+        :on-press #(re-frame/dispatch [:chat.ui/edit-message message])
+        :label    (i18n/label :t/edit-message)
+        :icon     :main-icons/edit-context
         :id       :edit}])
     (when show-input?
-      [{:on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
+      [{:type     :main
+        :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
         :label    (i18n/label :t/message-reply)
+        :icon     :main-icons/reply-context
         :id       :reply}])
-    [{:on-press #(react/copy-to-clipboard
+    [{:type     :main
+      :on-press #(react/copy-to-clipboard
                   (components.reply/get-quoted-text-with-mentions
                    (get content :parsed-text)))
-      :label    (i18n/label :t/sharing-copy-to-clipboard)
+      :label    (i18n/label :t/copy-text)
+      :icon     :main-icons/copy-context
       :id       :copy}]
     (when message-pin-enabled
-      [{:on-press #(pin-message message)
-        :label    (if pinned (i18n/label :t/unpin) (i18n/label :t/pin))
+      [{:type     :main
+        :on-press #(pin-message message)
+        :label    (if pinned (i18n/label :t/unpin-from-chat) (i18n/label :t/pin-to-chat))
+        :icon     :main-icons/pin-context
         :id       (if pinned :unpin :pin)}])
     (when (and outgoing config/delete-message-enabled?)
-      [{:on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
-        :label    (i18n/label :t/delete)
-        :id       :delete}]))))
+      [{:type     :danger
+        :on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
+        :label    (i18n/label :t/delete-for-everyone)
+        :icon     :main-icons/delete-context
+        :id       :delete-for-all}]))))
 
 (defn collapsible-text-message [_ _]
   (let [collapsed?   (reagent/atom false)
@@ -489,13 +499,20 @@
                                      :on-long-press (fn []
                                                       (on-long-press
                                                        (concat
-                                                        [{:on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
+                                                        [{:type     :main
+                                                          :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
                                                           :id       :reply
+                                                          :icon     :main-icons/reply-context
                                                           :label    (i18n/label :t/message-reply)}
-                                                         {:on-press #(react/copy-to-clipboard (get content :text))
+                                                         {:type     :main
+                                                          :on-press #(react/copy-to-clipboard (get content :text))
                                                           :id       :copy
-                                                          :label    (i18n/label :t/sharing-copy-to-clipboard)}]
-                                                        (when message-pin-enabled [{:on-press #(pin-message message)
+                                                          :icon     :main-icons/copy-context
+                                                          :label    (i18n/label :t/copy-text)}]
+                                                        (when message-pin-enabled [{:type     :main
+                                                                                    :on-press #(pin-message message)
+                                                                                    :id       :pin
+                                                                                    :icon     :main-icons/pin-context
                                                                                     :label    (if pinned (i18n/label :t/unpin) (i18n/label :t/pin))}]))))})
         [react/view style/message-view-wrapper
          [message-timestamp message show-timestamp?]
@@ -525,9 +542,11 @@
                                    :on-long-press       (fn []
                                                           (on-long-press
                                                            (when-not outgoing
-                                                             [{:on-press #(when pack
+                                                             [{:type     :main
+                                                               :icon     :main-icons/stickers-context
+                                                               :on-press #(when pack
                                                                             (re-frame/dispatch [:chat.ui/show-profile from]))
-                                                               :label    (i18n/label :t/view-details)}])))})
+                                                               :label    (i18n/label :t/see-sticker-set)}])))})
       [fast-image/fast-image {:style  {:margin 10 :width 140 :height 140}
                               :source {:uri (str (-> content :sticker :url) "&download=true")}}]]
      reaction-picker]))
@@ -543,25 +562,33 @@
      :delay-long-press 100
      :on-long-press (fn []
                       (on-long-press
-                       (concat [{:on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
+                       (concat [{:type     :main
+                                 :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
                                  :id       :reply
+                                 :icon     :main-icons/reply-context
                                  :label    (i18n/label :t/message-reply)}
-                                {:on-press #(re-frame/dispatch [:chat.ui/save-image-to-gallery (:image content)])
+                                {:type     :main
+                                 :on-press #(re-frame/dispatch [:chat.ui/save-image-to-gallery (:image content)])
                                  :id       :save
-                                 :label    (i18n/label :t/save)}
-                                {:on-press #(images/download-image-http
+                                 :icon     :main-icons/save-context
+                                 :label    (i18n/label :t/save-image-library)}
+                                {:type     :main
+                                 :on-press #(images/download-image-http
                                              (get-in message [:content :image]) preview/share)
                                  :id       :share
-                                 :label    (i18n/label :t/share)}]
+                                 :icon     :main-icons/share-context
+                                 :label    (i18n/label :t/share-image)}]
                                (when (and outgoing config/delete-message-enabled?)
-                                 [{:on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
-                                   :label    (i18n/label :t/delete)
+                                 [{:type     :danger
+                                   :on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
+                                   :label    (i18n/label :t/delete-for-everyone)
+                                   :icon     :main-icons/delete-context
                                    :id       :delete}]))))}]
    reaction-picker])
 
 (defmethod ->message constants/content-type-audio []
   (let [show-timestamp? (reagent/atom false)]
-    (fn [{:keys [outgoing] :as message}
+    (fn [{:keys [outgoing pinned] :as message}
          {:keys [on-long-press modal]
           :as   reaction-picker}]
       [message-content-wrapper message
@@ -569,8 +596,20 @@
         (when-not modal
           {:on-long-press
            (fn [] (on-long-press (if (and outgoing config/delete-message-enabled?)
-                                   [{:on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
-                                     :label    (i18n/label :t/delete)
+                                   [{:type     :main
+                                     :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
+                                     :label    (i18n/label :t/message-reply)
+                                     :icon     :main-icons/reply-context
+                                     :id       :reply}
+                                    {:type     :main
+                                     :on-press #(pin-message message)
+                                     :label    (if pinned (i18n/label :t/unpin-from-chat) (i18n/label :t/pin-to-chat))
+                                     :icon     :main-icons/pin-context
+                                     :id       (if pinned :unpin :pin)}
+                                    {:type     :danger
+                                     :on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
+                                     :label    (i18n/label :t/delete-for-everyone)
+                                     :icon     :main-icons/delete-context
                                      :id       :delete}]
                                    [])))
            :on-press (fn []

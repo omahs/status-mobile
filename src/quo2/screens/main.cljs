@@ -1,25 +1,26 @@
 (ns quo2.screens.main
-  (:require [quo.react-native :as rn]
-            [quo.theme :as theme]
+  (:require [quo.components.safe-area :as safe-area]
+            [quo.core :as quo]
             [quo.design-system.colors :as colors]
-            [re-frame.core :as re-frame]
-            [quo2.screens.button :as button]
-            [quo2.screens.token-overview :as token-overview]
-            [quo2.screens.text :as text]
-            [quo2.screens.tabs :as tabs]
-            [quo2.screens.status-tags :as status-tags]
-            [quo2.screens.context-tags :as context-tags]
-            [quo2.screens.group-avatar :as group-avatar]
+            [quo.react-native :as rn]
+            [quo.theme :as theme]
+            [quo2.screens.dropdown :as dropdown]
             [quo2.screens.activity-logs :as activity-logs]
-            [quo2.screens.token-tag :as token-tag]
+            [quo2.screens.button :as button]
+            [quo2.screens.context-tags :as context-tags]
             [quo2.screens.counter :as counter]
-            [quo2.screens.wallet-user-avatar :as wallet-user-avatar]
+            [quo2.screens.group-avatar :as group-avatar]
             [quo2.screens.icon-avatar :as icon-avatar]
-            [quo2.screens.segmented :as segmented]
             [quo2.screens.info-message :as info-message]
             [quo2.screens.information-box :as information-box]
-            [quo.components.safe-area :as safe-area]
-            [quo.core :as quo]))
+            [quo2.screens.segmented :as segmented]
+            [quo2.screens.status-tags :as status-tags]
+            [quo2.screens.tabs :as tabs]
+            [quo2.screens.text :as text]
+            [quo2.screens.token-overview :as token-overview]
+            [quo2.screens.token-tag :as token-tag]
+            [quo2.screens.wallet-user-avatar :as wallet-user-avatar]
+            [re-frame.core :as re-frame]))
 
 (def screens [{:name      :quo2-texts
                :insets    {:top false}
@@ -30,6 +31,9 @@
               {:name      :quo2-button
                :insets    {:top false}
                :component button/preview-button}
+              {:name      :quo2-dropdown
+               :insets    {:top false}
+               :component dropdown/preview-dropdown}
               {:name      :quo2-token-overview
                :insets    {:top false}
                :component token-overview/preview-token-overview}

@@ -53,30 +53,30 @@
         font-size (:font-size font)
         spacing 4]
     [rn/touchable-opacity (cond-> {:on-press (fn []
-                                       (if (swap! open? not)
-                                         (apply-anim dd-height 120)
-                                         (apply-anim dd-height 0)))
-                           :style (cond-> (merge
-                                   (if icon
-                                     padding-with-icon
-                                     padding-with-no-icon)
-                                   {:width (if icon
-                                             width-with-icon
-                                             width)
-                                    :height height
-                                    :border-radius (if (= :small size)
-                                                     8
-                                                     10)
-                                    :flex-direction :row
-                                    :align-items :center
-                                    :border-width 1
-                                    :border-color (if @open?
-                                                    border-color
-                                                    (color-by-10 border-color))
-                                    :background-color (if @open?
-                                                        dd-color
-                                                        (color-by-10 dd-color))})
-                                    disabled? (assoc :opacity 0.3))}
+                                               (if (swap! open? not)
+                                                 (apply-anim dd-height 120)
+                                                 (apply-anim dd-height 0)))
+                                   :style (cond-> (merge
+                                                   (if icon
+                                                     padding-with-icon
+                                                     padding-with-no-icon)
+                                                   {:width (if icon
+                                                             width-with-icon
+                                                             width)
+                                                    :height height
+                                                    :border-radius (if (= :small size)
+                                                                     8
+                                                                     10)
+                                                    :flex-direction :row
+                                                    :align-items :center
+                                                    :border-width 1
+                                                    :border-color (if @open?
+                                                                    border-color
+                                                                    (color-by-10 border-color))
+                                                    :background-color (if @open?
+                                                                        dd-color
+                                                                        (color-by-10 dd-color))})
+                                            disabled? (assoc :opacity 0.3))}
                             disabled? (assoc :disabled true))
      (when icon
        [icons/icon icon {:no-color true

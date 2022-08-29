@@ -11,15 +11,15 @@
             [status-im.ui.screens.wallet.manage-connections.styles :as styles]
             [status-im.utils.utils :as utils]))
 
-(defn account-selector-bottom-sheet [session show-account-selector]
-  (when @show-account-selector
+(defn account-selector-bottom-sheet [session show-account-selector?]
+  (when @show-account-selector?
     [rn/view {:style {:height 50}}
      [bottom-panel/animated-bottom-panel
       session
       app-management-sheet-view
       false]]))
 
-(defn print-session-info [session visible-accounts show-account-selector]
+(defn print-session-info [session visible-accounts show-account-selector?]
   (let [peer-meta (get-in session [:params 0 :peerMeta])
         peer-id (get-in session [:params 0 :peerId])
         name (get peer-meta :name)
@@ -59,7 +59,7 @@
                                     :color colors/red}]]
         (when selected-account ;; The account might not be available in theory, if deleted
           [rn/touchable-opacity {:style (styles/selected-account-container (:color selected-account))
-                                 :on-press #(swap! show-account-selector not)}
+                                 :on-press #(swap! show-account-selector? not)}
            [rn/text {:style styles/selected-account} (:name selected-account)]])]]]]))
 
 (defn views []
@@ -67,8 +67,8 @@
         visible-accounts @(re-frame/subscribe [:visible-accounts-without-watch-only])]
     [rn/view {:margin-top 10}
      (doall (map-indexed (fn [idx session]
-                           (let [show-account-selector (reagent/atom false)]
+                           (let [show-account-selector? (reagent/atom false)]
                              [rn/view {:key idx}
-                              [print-session-info session visible-accounts show-account-selector]
-                              [account-selector-bottom-sheet session show-account-selector]]))
+                              [print-session-info session visible-accounts show-account-selector?]
+                              [account-selector-bottom-sheet session show-account-selector?]]))
                          legacy-sessions))]))

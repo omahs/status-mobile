@@ -4,21 +4,20 @@
             [quo.react-native :as rn]
             [re-frame.core :as re-frame]
             [reagent.core :as reagent]
-            [status-im.constants :as constants]
+            [status-im.ui.components.bottom-panel.views :as bottom-panel]
             [status-im.ui.components.icons.icons :as icons]
             [status-im.ui.components.react :as react]
-            [status-im.ui.screens.wallet-connect.session-proposal.views :refer [account-selector]]
+            [status-im.ui.screens.wallet-connect.session-proposal.views :refer [app-management-sheet-view]]
             [status-im.ui.screens.wallet.manage-connections.styles :as styles]
             [status-im.utils.utils :as utils]))
 
-(defn account-selector-sheet [{:keys [wc-version] :as session} visible-accounts show-account-selector active-account-atom]
-  (let [{:keys [topic]} (when-not (= wc-version constants/wallet-connect-version-1) session)
-        update-fn #(re-frame/dispatch (if (= wc-version constants/wallet-connect-version-1)
-                                        [:wallet-connect-legacy/change-session-account session @active-account-atom]
-                                        [:wallet-connect/change-session-account topic @active-account-atom]))]
-    (when @show-account-selector
-      [rn/view
-       [account-selector visible-accounts active-account-atom update-fn]])))
+(defn account-selector-bottom-sheet [session show-account-selector]
+  (when @show-account-selector
+    [rn/view {:style {:height 50}}
+     [bottom-panel/animated-bottom-panel
+      session
+      app-management-sheet-view
+      false]]))
 
 (defn print-session-info [session visible-accounts show-account-selector]
   (let [peer-meta (get-in session [:params 0 :peerMeta])
@@ -68,10 +67,8 @@
         visible-accounts @(re-frame/subscribe [:visible-accounts-without-watch-only])]
     [rn/view {:margin-top 10}
      (doall (map-indexed (fn [idx session]
-                           (let [account-addr (get-in session [:params 0 :accounts 0])
-                                 active-account-atom (reagent/atom @(re-frame/subscribe [:account-by-address account-addr]))
-                                 show-account-selector (reagent/atom false)]
+                           (let [show-account-selector (reagent/atom false)]
                              [rn/view {:key idx}
                               [print-session-info session visible-accounts show-account-selector]
-                              [account-selector-sheet session visible-accounts show-account-selector active-account-atom]]))
+                              [account-selector-bottom-sheet session show-account-selector]]))
                          legacy-sessions))]))

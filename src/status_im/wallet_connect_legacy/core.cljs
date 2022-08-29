@@ -142,6 +142,20 @@
                     (:wallet-connect-legacy/sessions db))]
     {:wc-1-clean-up-sessions connectors}))
 
+(fx/defn save-session
+  {:events [:wallet-connect-legacy/save-session]}
+  [{:keys [db]} {:keys [peer-id dapp-name dapp-url connector]}]
+  (let [info (.stringify js/JSON (.-session connector))]
+    {:db db
+     ::json-rpc/call [{:method     "wakuext_addWalletConnectSession"
+                       :params     [{:id peer-id
+                                     :info info
+                                    ;;  info will be the updated value
+                                     :dappName dapp-name
+                                     :dappUrl dapp-url}]
+                       :on-success #(log/info "wakuext_addWalletConnectSession success call back , data =>" %)
+                       :on-error   #(log/error "wakuext_addWalletConnectSession error call back , data =>" %)}]}))
+
 (fx/defn session-connected
   {:events [:wallet-connect-legacy/created]}
   [{:keys [db]} session]
@@ -149,7 +163,6 @@
         session (assoc (types/js->clj session)
                        :wc-version constants/wallet-connect-version-1
                        :connector connector)
-        info (.stringify js/JSON (.-session connector))
         peer-id (get-in session [:params 0 :peerId])
         dapp-name (get-in session [:params 0 :peerMeta :name])
         dapp-url (get-in session [:params 0 :peerMeta :url])]
@@ -159,13 +172,10 @@
              (update :wallet-connect-legacy/sessions
                      conj
                      session))
-     ::json-rpc/call [{:method     "wakuext_addWalletConnectSession"
-                       :params     [{:id peer-id
-                                     :info info
-                                     :dappName dapp-name
-                                     :dappUrl dapp-url}]
-                       :on-success #(log/info "wakuext_addWalletConnectSession success call back , data =>" %)
-                       :on-error   #(log/error "wakuext_addWalletConnectSession error call back , data =>" %)}]}))
+     ::save-session {:peer-id peer-id
+                     :dapp-name dapp-name
+                     :connector connector
+                     :dapp-url dapp-url}}))
 
 (fx/defn manage-app
   {:events [:wallet-connect-legacy/manage-app]}

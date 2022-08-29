@@ -28,15 +28,15 @@
         icons (get peer-meta :icons)
         dapp-name (get-in session [:params 0 :peerMeta :name])
         dapp-url (get-in session [:params 0 :peerMeta :url])
-        _ (re-frame/dispatch [:wallet-connect-legacy/save-session {:peer-id peer-id
-                                                                   :connector (:connector session)
-                                                                   :dapp-name dapp-name
-                                                                   :dapp-url dapp-url}])
         icon-uri (first (status-im.utils.utils/exclude-svg-resources icons))
         selected-account (first (filter
                                  #(= account
                                      (:address %))
-                                 visible-accounts))]
+                                 visible-accounts))
+        _ (re-frame/dispatch [:wallet-connect-legacy/save-session {:peer-id peer-id
+                                                                   :connector (:connector session)
+                                                                   :dapp-name dapp-name
+                                                                   :dapp-url dapp-url}])]
     ^{:key peer-id}
     [rn/view
      [:<>

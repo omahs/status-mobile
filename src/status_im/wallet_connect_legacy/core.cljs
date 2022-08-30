@@ -146,7 +146,7 @@
   {:events [:wallet-connect-legacy/save-session]}
   [{:keys [db]} {:keys [peer-id dapp-name dapp-url connector]}]
   (let [info (.stringify js/JSON (.-session connector))]
-      {::json-rpc/call [{:method     "wakuext_addWalletConnectSession"
+    {::json-rpc/call [{:method     "wakuext_addWalletConnectSession"
                        :params     [{:id peer-id
                                      :info info
                                     ;;  info will be the updated value
@@ -165,7 +165,6 @@
         peer-id (get-in session [:params 0 :peerId])
         dapp-name (get-in session [:params 0 :peerMeta :name])
         dapp-url (get-in session [:params 0 :peerMeta :url])]
-
     (fx/merge cofx
               {:db (-> db
                        (assoc :wallet-connect/session-connected session)

@@ -27,7 +27,7 @@
        first
        :emoji-reaction-id))
 
-(defn with-reaction-picker-old []
+(defn with-reaction-picker []
   (let [ref              (react/create-ref)
         animated-state   (animated/value 0)
         spring-animation (animated/with-spring-transition
@@ -47,7 +47,6 @@
                                    [] reactions)
             on-emoji-press (fn [emoji-id]
                              (let [active ((set own-reactions) emoji-id)]
-                               (println emoji-id "EMOJI ID")
                                (if active
                                  (retract-emoji {:emoji-id          emoji-id
                                                  :emoji-reaction-id (extract-id reactions emoji-id)})
@@ -97,38 +96,19 @@
                               :on-long-press #()
                               :close-modal   on-close}]]])]))))
 
-(defn with-reaction-picker []
+(defn with-context-drawer []
   (let [ref              (react/create-ref)
-        animated-state   (animated/value 0)
-        spring-animation (animated/with-spring-transition
-                           animated-state
-                           (:jump animated/springs))
-        animation        (animated/with-timing-transition
-                           animated-state
-                           {:duration reaction-picker/animation-duration
-                            :easing   (:ease-in-out animated/easings)})
-        visible          (reagent/atom false)
-        actions          (reagent/atom nil)
-        position         (reagent/atom {})]
-    (fn [{:keys [message reactions outgoing outgoing-status render send-emoji retract-emoji
-                 picker-on-close timeline]}]
+        actions          (reagent/atom nil)]
+    (fn [{:keys [message reactions outgoing outgoing-status render send-emoji retract-emoji timeline]}]
       (let [own-reactions  (reduce (fn [acc {:keys [emoji-id own]}]
                                      (if own (conj acc emoji-id) acc))
                                    [] reactions)
             on-emoji-press (fn [emoji-id]
                              (let [active ((set own-reactions) emoji-id)]
-                               (println emoji-id "EMOJI ID")
                                (if active
                                  (retract-emoji {:emoji-id          emoji-id
                                                  :emoji-reaction-id (extract-id reactions emoji-id)})
                                  (send-emoji {:emoji-id emoji-id}))))
-            on-close       (fn []
-                             (animated/set-value animated-state 0)
-                             (js/setTimeout
-                              (fn []
-                                (reset! actions nil)
-                                (reset! visible false)
-                                (picker-on-close))))
             on-open        (fn []
                              (re-frame/dispatch [:bottom-sheet/show-sheet
                                                  {:content (message-context-drawer/message-options @actions (into #{} (js->clj own-reactions)) #(on-emoji-press %))}]))]
@@ -141,27 +121,4 @@
                                                       (and outgoing (= outgoing-status :sent)))
                                               (reset! actions act)
                                               (get-picker-position ref on-open)))}]
-          [reaction-row/message-reactions message reactions timeline]]
-         (when @visible
-           [rn/modal {:on-request-close on-close
-                      :on-show          (fn []
-                                          (js/requestAnimationFrame
-                                           #(animated/set-value animated-state 1)))
-                      :transparent      true}
-            [reaction-picker/modal {:outgoing       (:outgoing message)
-                                    :display-photo  (:display-photo? message)
-                                    :animation      animation
-                                    :spring         spring-animation
-                                    :top            (:top @position)
-                                    :message-height (:height @position)
-                                    :on-close       on-close
-                                    :actions        @actions
-                                    :own-reactions  own-reactions
-                                    :timeline       timeline
-                                    :send-emoji     (fn [emoji]
-                                                      (on-close)
-                                                      (js/setTimeout #(on-emoji-press emoji)
-                                                                     reaction-picker/animation-duration))}
-             [render message {:modal         true
-                              :on-long-press #()
-                              :close-modal   on-close}]]])]))))
+          [reaction-row/message-reactions message reactions timeline]]]))))

@@ -413,32 +413,32 @@
       [{:type     :main
         :on-press #(re-frame/dispatch [:chat.ui/edit-message message])
         :label    (i18n/label :t/edit-message)
-        :icon     :main-icons/edit-context
+        :icon     :main-icons/edit-context20
         :id       :edit}])
     (when show-input?
       [{:type     :main
         :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
         :label    (i18n/label :t/message-reply)
-        :icon     :main-icons/reply-context
+        :icon     :main-icons/reply-context20
         :id       :reply}])
     [{:type     :main
       :on-press #(react/copy-to-clipboard
                   (components.reply/get-quoted-text-with-mentions
                    (get content :parsed-text)))
       :label    (i18n/label :t/copy-text)
-      :icon     :main-icons/copy-context
+      :icon     :main-icons/copy-context20
       :id       :copy}]
     (when message-pin-enabled
       [{:type     :main
         :on-press #(pin-message message)
-        :label    (if pinned (i18n/label :t/unpin-from-chat) (i18n/label :t/pin-to-chat))
-        :icon     :main-icons/pin-context
+        :label    (i18n/label  (if pinned :t/unpin-from-chat :t/pin-to-chat))
+        :icon     :main-icons/pin-context20
         :id       (if pinned :unpin :pin)}])
     (when (and outgoing config/delete-message-enabled?)
       [{:type     :danger
         :on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
         :label    (i18n/label :t/delete-for-everyone)
-        :icon     :main-icons/delete-context
+        :icon     :main-icons/delete-context20
         :id       :delete-for-all}]))))
 
 (defn collapsible-text-message [_ _]
@@ -502,17 +502,17 @@
                                                         [{:type     :main
                                                           :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
                                                           :id       :reply
-                                                          :icon     :main-icons/reply-context
+                                                          :icon     :main-icons/reply-context20
                                                           :label    (i18n/label :t/message-reply)}
                                                          {:type     :main
                                                           :on-press #(react/copy-to-clipboard (get content :text))
                                                           :id       :copy
-                                                          :icon     :main-icons/copy-context
+                                                          :icon     :main-icons/copy-context20
                                                           :label    (i18n/label :t/copy-text)}]
                                                         (when message-pin-enabled [{:type     :main
                                                                                     :on-press #(pin-message message)
                                                                                     :id       :pin
-                                                                                    :icon     :main-icons/pin-context
+                                                                                    :icon     :main-icons/pin-context20
                                                                                     :label    (if pinned (i18n/label :t/unpin) (i18n/label :t/pin))}]))))})
         [react/view style/message-view-wrapper
          [message-timestamp message show-timestamp?]
@@ -543,7 +543,7 @@
                                                           (on-long-press
                                                            (when-not outgoing
                                                              [{:type     :main
-                                                               :icon     :main-icons/stickers-context
+                                                               :icon     :main-icons/stickers-context20
                                                                :on-press #(when pack
                                                                             (re-frame/dispatch [:chat.ui/show-profile from]))
                                                                :label    (i18n/label :t/see-sticker-set)}])))})
@@ -565,24 +565,24 @@
                        (concat [{:type     :main
                                  :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
                                  :id       :reply
-                                 :icon     :main-icons/reply-context
+                                 :icon     :main-icons/reply-context20
                                  :label    (i18n/label :t/message-reply)}
                                 {:type     :main
                                  :on-press #(re-frame/dispatch [:chat.ui/save-image-to-gallery (:image content)])
                                  :id       :save
-                                 :icon     :main-icons/save-context
+                                 :icon     :main-icons/save-context20
                                  :label    (i18n/label :t/save-image-library)}
                                 {:type     :main
                                  :on-press #(images/download-image-http
                                              (get-in message [:content :image]) preview/share)
                                  :id       :share
-                                 :icon     :main-icons/share-context
+                                 :icon     :main-icons/share-context20
                                  :label    (i18n/label :t/share-image)}]
                                (when (and outgoing config/delete-message-enabled?)
                                  [{:type     :danger
                                    :on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
                                    :label    (i18n/label :t/delete-for-everyone)
-                                   :icon     :main-icons/delete-context
+                                   :icon     :main-icons/delete-context20
                                    :id       :delete}]))))}]
    reaction-picker])
 
@@ -599,17 +599,17 @@
                                    [{:type     :main
                                      :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
                                      :label    (i18n/label :t/message-reply)
-                                     :icon     :main-icons/reply-context
+                                     :icon     :main-icons/reply-context20
                                      :id       :reply}
                                     {:type     :main
                                      :on-press #(pin-message message)
-                                     :label    (if pinned (i18n/label :t/unpin-from-chat) (i18n/label :t/pin-to-chat))
-                                     :icon     :main-icons/pin-context
+                                     :label    (i18n/label  (if pinned :t/unpin-from-chat :t/pin-to-chat))
+                                     :icon     :main-icons/pin-context20
                                      :id       (if pinned :unpin :pin)}
                                     {:type     :danger
                                      :on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
                                      :label    (i18n/label :t/delete-for-everyone)
-                                     :icon     :main-icons/delete-context
+                                     :icon     :main-icons/delete-context20
                                      :id       :delete}]
                                    [])))
            :on-press (fn []
@@ -670,7 +670,7 @@
 
 (defn chat-message [{:keys [display-photo? pinned pinned-by] :as message} space-keeper]
   [:<>
-   [reactions/with-reaction-picker
+   [reactions/with-context-drawer
     {:message         message
      :reactions       @(re-frame/subscribe [:chats/message-reactions (:message-id message) (:chat-id message)])
      :picker-on-open  (fn []

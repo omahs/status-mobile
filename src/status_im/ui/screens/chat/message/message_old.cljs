@@ -680,7 +680,7 @@
 
 (defn chat-message [{:keys [outgoing display-photo? pinned pinned-by] :as message} space-keeper]
   [:<>
-   [reactions/with-reaction-picker-old
+   [reactions/with-reaction-picker
     {:message         message
      :reactions       @(re-frame/subscribe [:chats/message-reactions (:message-id message) (:chat-id message)])
      :picker-on-open  (fn []

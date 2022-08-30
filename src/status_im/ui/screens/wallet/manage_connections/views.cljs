@@ -9,34 +9,50 @@
             [status-im.ui.components.react :as react]
             [status-im.ui.screens.wallet-connect.session-proposal.views :refer [app-management-sheet-view]]
             [status-im.ui.screens.wallet.manage-connections.styles :as styles]
+            [status-im.utils.handlers :refer [<sub]]
             [status-im.utils.utils :as utils]))
 
-(defn account-selector-bottom-sheet [session show-account-selector?]
-  (when @show-account-selector?
-    [rn/view {:style {:height 50}}
-     [bottom-panel/animated-bottom-panel
-      session
-      app-management-sheet-view
-      false]]))
+(defn get-account-selector-state
+  [account-tab]
+  (-> account-tab
+      second
+      :session
+      :params
+      first
+      :accounts))
 
-(defn print-session-info [session visible-accounts show-account-selector?]
+(defn account-selector-bottom-sheet [{:keys [session show-account-selector? dapp-name dapp-url peer-id]}]
+  (reagent/create-class
+   {:reagent-render
+    (fn [{:keys [session show-account-selector? dapp-name dapp-url peer-id]}]
+      (when @show-account-selector?
+        [rn/view {:style {:height 50}}
+         [bottom-panel/animated-bottom-panel
+          session
+          app-management-sheet-view
+          true]]))
+    :component-did-update (fn [this old-argv]
+                            (let [account-tab-changed? (not= (get-account-selector-state old-argv)
+                                                             (get-account-selector-state (reagent/argv this)))]
+                              (when account-tab-changed?
+                                (re-frame/dispatch [:wallet-connect-legacy/save-session
+                                                    {:peer-id peer-id
+                                                     :connector (:connector session)
+                                                     :dapp-name dapp-name
+                                                     :dapp-url dapp-url}]))))}))
+
+(defn print-session-info [{:keys [session visible-accounts show-account-selector?]}]
   (let [peer-meta (get-in session [:params 0 :peerMeta])
         peer-id (get-in session [:params 0 :peerId])
         name (get peer-meta :name)
         url (get peer-meta :url)
         account (get-in session [:params 0 :accounts 0])
         icons (get peer-meta :icons)
-        dapp-name (get-in session [:params 0 :peerMeta :name])
-        dapp-url (get-in session [:params 0 :peerMeta :url])
         icon-uri (first (status-im.utils.utils/exclude-svg-resources icons))
         selected-account (first (filter
                                  #(= account
                                      (:address %))
-                                 visible-accounts))
-        _ (re-frame/dispatch [:wallet-connect-legacy/save-session {:peer-id peer-id
-                                                                   :connector (:connector session)
-                                                                   :dapp-name dapp-name
-                                                                   :dapp-url dapp-url}])]
+                                 visible-accounts))]
     ^{:key peer-id}
     [rn/view
      [:<>
@@ -63,12 +79,21 @@
            [rn/text {:style styles/selected-account} (:name selected-account)]])]]]]))
 
 (defn views []
-  (let [legacy-sessions @(re-frame/subscribe [:wallet-connect-legacy/sessions])
-        visible-accounts @(re-frame/subscribe [:visible-accounts-without-watch-only])]
+  (let [legacy-sessions (<sub [:wallet-connect-legacy/sessions])
+        visible-accounts (<sub [:visible-accounts-without-watch-only])]
     [rn/view {:margin-top 10}
-     (doall (map-indexed (fn [idx session]
-                           (let [show-account-selector? (reagent/atom false)]
-                             [rn/view {:key idx}
-                              [print-session-info session visible-accounts show-account-selector?]
-                              [account-selector-bottom-sheet session show-account-selector?]]))
-                         legacy-sessions))]))
+     (map-indexed (fn [idx session]
+                    (let [show-account-selector? (reagent/atom false)
+                          dapp-name (get-in session [:params 0 :peerMeta :name])
+                          dapp-url (get-in session [:params 0 :peerMeta :url])
+                          peer-id (get-in session [:params 0 :peerId])]
+                      [rn/view {:key idx}
+                       [print-session-info {:session session
+                                            :visible-accounts visible-accounts
+                                            :show-account-selector? show-account-selector?}]
+                       [account-selector-bottom-sheet {:session session
+                                                       :show-account-selector? show-account-selector?
+                                                       :dapp-name dapp-name
+                                                       :dapp-url dapp-url
+                                                       :peer-id peer-id}]]))
+                  legacy-sessions)]))

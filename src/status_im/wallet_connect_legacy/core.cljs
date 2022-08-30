@@ -146,8 +146,7 @@
   {:events [:wallet-connect-legacy/save-session]}
   [{:keys [db]} {:keys [peer-id dapp-name dapp-url connector]}]
   (let [info (.stringify js/JSON (.-session connector))]
-    {:db db
-     ::json-rpc/call [{:method     "wakuext_addWalletConnectSession"
+      {::json-rpc/call [{:method     "wakuext_addWalletConnectSession"
                        :params     [{:id peer-id
                                      :info info
                                     ;;  info will be the updated value
@@ -158,7 +157,7 @@
 
 (fx/defn session-connected
   {:events [:wallet-connect-legacy/created]}
-  [{:keys [db]} session]
+  [{:keys [db] :as cofx} session]
   (let [connector (get db :wallet-connect-legacy/proposal-connector)
         session (assoc (types/js->clj session)
                        :wc-version constants/wallet-connect-version-1
@@ -166,16 +165,18 @@
         peer-id (get-in session [:params 0 :peerId])
         dapp-name (get-in session [:params 0 :peerMeta :name])
         dapp-url (get-in session [:params 0 :peerMeta :url])]
-    {:show-wallet-connect-success-sheet nil
-     :db (-> db
-             (assoc :wallet-connect/session-connected session)
-             (update :wallet-connect-legacy/sessions
-                     conj
-                     session))
-     ::save-session {:peer-id peer-id
-                     :dapp-name dapp-name
-                     :connector connector
-                     :dapp-url dapp-url}}))
+
+    (fx/merge cofx
+              {:db (-> db
+                       (assoc :wallet-connect/session-connected session)
+                       (update :wallet-connect-legacy/sessions
+                               conj
+                               session))
+               :show-wallet-connect-success-sheet nil}
+              (save-session {:peer-id peer-id
+                             :dapp-name dapp-name
+                             :dapp-url dapp-url
+                             :connector connector}))))
 
 (fx/defn manage-app
   {:events [:wallet-connect-legacy/manage-app]}

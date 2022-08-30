@@ -12,9 +12,9 @@
             [status-im.utils.handlers :refer [<sub]]
             [status-im.utils.utils :as utils]))
 
-(defn get-account-selector-state
-  [account-tab]
-  (-> account-tab
+(defn get-currently-selected-accounts
+  [selected-tab]
+  (-> selected-tab
       second
       :session
       :params
@@ -32,8 +32,8 @@
           app-management-sheet-view
           true]]))
     :component-did-update (fn [this old-argv]
-                            (let [account-tab-changed? (not= (get-account-selector-state old-argv)
-                                                             (get-account-selector-state (reagent/argv this)))]
+                            (let [account-tab-changed? (not= (get-currently-selected-accounts old-argv)
+                                                             (get-currently-selected-accounts (reagent/argv this)))]
                               (when account-tab-changed?
                                 (re-frame/dispatch [:wallet-connect-legacy/save-session
                                                     {:peer-id peer-id

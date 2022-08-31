@@ -48,7 +48,7 @@
 
 (defn dropdown-comp [{:keys [icon open? text dd-height size disabled? dd-color border-color]}]
   (let [dark? (colors/dark?)
-        {:keys [width height width-with-icon padding font icon-size]} (get-in sizes [size])
+        {:keys [width height width-with-icon padding font icon-size]} (size sizes)
         {:keys [padding-with-icon padding-with-no-icon]} padding
         font-size (:font-size font)
         spacing 4]
@@ -56,27 +56,27 @@
                                                (if (swap! open? not)
                                                  (apply-anim dd-height 120)
                                                  (apply-anim dd-height 0)))
-                                   :style (cond-> (merge
-                                                   (if icon
-                                                     padding-with-icon
-                                                     padding-with-no-icon)
-                                                   {:width (if icon
-                                                             width-with-icon
-                                                             width)
-                                                    :height height
-                                                    :border-radius (if (= :small size)
-                                                                     8
-                                                                     10)
-                                                    :flex-direction :row
-                                                    :align-items :center
-                                                    :border-width 1
-                                                    :border-color (if @open?
-                                                                    border-color
-                                                                    (color-by-10 border-color))
-                                                    :background-color (if @open?
-                                                                        dd-color
-                                                                        (color-by-10 dd-color))})
-                                            disabled? (assoc :opacity 0.3))}
+                                   :style (merge
+                                           (if icon
+                                             padding-with-icon
+                                             padding-with-no-icon)
+                                           {:width (if icon
+                                                     width-with-icon
+                                                     width)
+                                            :height height
+                                            :border-radius (if (= :small size)
+                                                             8
+                                                             10)
+                                            :flex-direction :row
+                                            :align-items :center
+                                            :border-width 1
+                                            :border-color (if @open?
+                                                            border-color
+                                                            (color-by-10 border-color))
+                                            :background-color (if @open?
+                                                                dd-color
+                                                                (color-by-10 dd-color))})}
+                            disabled? (assoc-in [:style :opacity] 0.3)
                             disabled? (assoc :disabled true))
      (when icon
        [icons/icon icon {:no-color true

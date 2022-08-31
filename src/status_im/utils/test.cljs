@@ -3,7 +3,15 @@
 
 (def native-status (js/require "../../modules/react-native-status/nodejs/bindings"))
 
-(def test-dir "/tmp")
+(def fs (js/require "fs"))
+(def path (js/require "path"))
+(def os (js/require "os"))
+
+(def tmpdir (.tmpdir os))
+
+(def test-dir-prefix (.join path tmpdir "status-mobile-tests"))
+
+(def test-dir (.mkdtempSync fs test-dir-prefix))
 
 (defn signal-received-callback [a]
   (re-frame/dispatch [:signals/signal-received a]))
@@ -41,6 +49,8 @@
                                     config
                                     accounts-data))
 
+            :logout (fn []
+                      (.logout native-status))
             :generateAliasAndIdenticonAsync (fn [seed callback]
                                               (let [generated-identicon (.identicon native-status seed)
                                                     generated-alias (.generateAlias native-status seed)]
@@ -50,6 +60,16 @@
                                                        (.multiAccountGenerateAndDeriveAddresses
                                                         native-status
                                                         json)))
+            :multiAccountLoadAccount (fn [json callback]
+                                       (callback
+                                        (.multiAccountLoadAccount
+                                         native-status
+                                         json)))
+            :multiAccountDeriveAddresses (fn [json callback]
+                                           (callback
+                                            (.multiAccountDeriveAddresses
+                                             native-status
+                                             json)))
             :initKeystore (fn [key-uid callback]
                             (callback
                              (.initKeystore

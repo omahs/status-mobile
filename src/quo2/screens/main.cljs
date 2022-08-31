@@ -4,21 +4,42 @@
             [quo.design-system.colors :as colors]
             [re-frame.core :as re-frame]
             [quo2.screens.button :as button]
+            [quo2.screens.token-overview :as token-overview]
             [quo2.screens.text :as text]
             [quo2.screens.tabs :as tabs]
             [quo2.screens.status-tags :as status-tags]
             [quo2.screens.channel-avatar :as channel-avatar]
+            [quo2.screens.context-tags :as context-tags]
+            [quo2.screens.group-avatar :as group-avatar]
+            [quo2.screens.activity-logs :as activity-logs]
+            [quo2.screens.token-tag :as token-tag]
             [quo2.screens.counter :as counter]
+            [quo2.screens.wallet-user-avatar :as wallet-user-avatar]
+            [quo2.screens.icon-avatar :as icon-avatar]
             [quo2.screens.segmented :as segmented]
+            [quo2.screens.info-message :as info-message]
+            [quo2.screens.information-box :as information-box]
             [quo.components.safe-area :as safe-area]
+            [quo2.screens.permission-tag :as permission-tag]
+            [quo2.screens.community-card-view :as community-card]
+            [quo2.screens.filter-tags :as filter-tags]
             [quo.core :as quo]))
 
 (def screens [{:name      :quo2-texts
                :insets    {:top false}
                :component text/preview-text}
+              {:name      :quo2-wallet-user-avatar
+               :insets    {:top false}
+               :component wallet-user-avatar/preview-wallet-user-avatar}
               {:name      :quo2-button
                :insets    {:top false}
                :component button/preview-button}
+              {:name      :quo2-token-overview
+               :insets    {:top false}
+               :component token-overview/preview-token-overview}
+              {:name      :quo2-icon-avatar
+               :insets    {:top false}
+               :component icon-avatar/preview-icon-avatar}
               {:name      :quo2-status-tags
                :insets    {:top false}
                :component status-tags/preview-status-tags}
@@ -28,12 +49,30 @@
               {:name      :quo2-tabs
                :insets    {:top false}
                :component tabs/preview-tabs}
+              {:name      :quo2-token-tag
+               :insets    {:top false}
+               :component token-tag/preview-token-tag}
               {:name      :quo2-segmented
                :insets    {:top false}
                :component segmented/preview-segmented}
               {:name      :quo2-counter
                :insets    {:top false}
-               :component counter/preview-counter}])
+               :component counter/preview-counter}
+              {:name      :info-message
+               :insets    {:top false}
+               :component info-message/preview-info-message}
+              {:name      :information-box
+               :insets    {:top false}
+               :component information-box/preview-information-box}
+              {:name      :quo2-permission-tag
+               :insets    {:top false}
+               :component permission-tag/preview-permission-tag}
+              {:name      :quo2-filter-tags
+               :insets    {:top false}
+               :component filter-tags/preview-filter-tags}
+              {:name      :quo2-community-cards
+               :insets    {:top false}
+               :component community-card/preview-community-card}])
 
 (defn theme-switcher []
   [rn/view {:style {:flex-direction   :row

@@ -1,4 +1,4 @@
-(ns status-im.ui.screens.chat.message.context-drawer
+(ns status-im.ui.screens.chat.bottom-sheets.context-drawer
   (:require [quo.react-native :as rn]
             [status-im.ui.components.react :as react]
             [re-frame.core :as re-frame]

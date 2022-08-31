@@ -6,7 +6,7 @@
             [quo.react :as react]
             [quo.animated :as animated]
             [re-frame.core :as re-frame]
-            [status-im.ui.screens.chat.message.context-drawer :as message-context-drawer]))
+            [status-im.ui.screens.chat.bottom-sheets.context-drawer :as message-context-drawer]))
 
 (defn measure-in-window [ref cb]
   (.measureInWindow ^js ref cb))

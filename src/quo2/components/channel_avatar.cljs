@@ -49,5 +49,4 @@
                     colors/neutral-50)
            :container-style {:width 16
                              :height 16}
-           :size 12
-           :height 16}]])]]))
+           :size 12}]])]]))

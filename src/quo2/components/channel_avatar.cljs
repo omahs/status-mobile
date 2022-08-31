@@ -23,18 +23,18 @@
       [icons/icon
        icon
        (cond->
-        {:container-style {:width (if big? 20 12)
-                           :height (if big? 20 12)}
+        {:container-style {:width (if big? 20 14)
+                           :height (if big? 20 14)}
          :size 20}
          (not (clojure-string/blank? icon-color)) (assoc :color icon-color)
          (clojure-string/blank? icon-color) (assoc :no-color true))]
       (when lock-exists?
         [rn/view {:style {:position :absolute
                           :left (if big?
-                                  12
+                                  13
                                   5)
                           :top (if big?
-                                 12
+                                 14
                                  5)
                           :background-color (if dark?
                                               colors/neutral-90

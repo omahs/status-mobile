@@ -12,8 +12,8 @@
             [status-im.ui.components.icons.icons :as icons]
             [quo.components.animated.pressable :as animated]))
 
-(defn themes [theme]
-  (case theme
+(defn themes [type]
+  (case type
     :main     {:icon-color         (theme-colors colors/neutral-50 colors/neutral-10)
                :active-background  (theme-colors colors/neutral-10 colors/neutral-90)
                :passive-background (theme-colors colors/white colors/neutral-90)
@@ -175,22 +175,22 @@
                                       :color           (theme-colors colors/neutral-50 colors/neutral-50)}]])]))
 
 (defn list-item
-  [{:keys [theme accessory disabled subtitle-max-lines icon icon-container-style
+  [{:keys [type accessory disabled subtitle-max-lines icon icon-container-style
            left-side-alignment icon-color
            title subtitle subtitle-secondary active on-press on-long-press chevron size text-size
            accessory-text accessibility-label title-accessibility-label accessory-style
            haptic-feedback haptic-type error animated animated-accessory? title-text-weight container-style
            active-background-enabled]
     :or   {subtitle-max-lines        1
-           theme                     :main
+           type                      :main
            haptic-feedback           true
            animated                  platform/ios?
            active-background-enabled true
            haptic-type               :selection}}]
-  (let [theme           (if disabled :disabled theme)
+  (let [type           (if disabled :disabled type)
         {:keys [text-color active-background passive-background]}
-        (themes theme)
-        icon-color      (or icon-color (:icon-color (themes theme)))
+        (themes type)
+        icon-color      (or icon-color (:icon-color (themes type)))
         optional-haptic (fn []
                           (when haptic-feedback
                             (haptic/trigger haptic-type)))

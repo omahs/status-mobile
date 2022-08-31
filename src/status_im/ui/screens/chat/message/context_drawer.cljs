@@ -40,7 +40,7 @@
         (for [action main-actions]
           ^{:key (:id action)}
           [quo2.list-item/list-item
-           {:theme               :main
+           {:type                :main
             :size                :small
             :title-text-weight   :medium
             :title               (:label action)
@@ -55,7 +55,7 @@
         (for [action danger-actions]
           ^{:key (:id action)}
           [quo2.list-item/list-item
-           {:theme               :danger
+           {:type                :danger
             :size                :small
             :title-text-weight   :medium
             :title               (:label action)
@@ -70,7 +70,7 @@
         (for [action admin-actions]
           ^{:key (:id action)}
           [quo2.list-item/list-item
-           {:theme               :danger
+           {:type                :danger
             :size                :small
             :title-text-weight   :medium
             :title               (:label action)

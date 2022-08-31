@@ -227,9 +227,16 @@
         networks (get db :networks/networks)
         current-network-id (get db :networks/current-network)
         current-network (get networks current-network-id)
+        dapp-name (get-in session [:params 0 :peerMeta :name])
+        dapp-url (get-in session [:params 0 :peerMeta :url])
+        peer-id (get-in session [:params 0 :peerId])
         chain-id (get-in current-network [:config :NetworkId])]
     {:hide-wallet-connect-app-management-sheet nil
      :wc-1-update-session [connector chain-id address]
+     :dispatch [:wallet-connect-legacy/save-session {:peer-id peer-id
+                                                     :dapp-url dapp-url
+                                                     :dapp-name dapp-name
+                                                     :connector connector}]
      :db (assoc db :wallet-connect/showing-app-management-sheet? false)}))
 
 (fx/defn disconnect-by-peer-id

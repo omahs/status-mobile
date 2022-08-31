@@ -48,7 +48,7 @@
                                  :background-color {:default  colors/primary-50-opa-20
                                                     :pressed  colors/primary-50-opa-30
                                                     :disabled colors/primary-50-opa-20}}
-                     :grey      {:icon-color       colors/neutral-40
+                     :grey      {:icon-color       colors/white
                                  :label            {:style {:color colors/white}}
                                  :background-color {:default  colors/neutral-80
                                                     :pressed  colors/neutral-60
@@ -89,7 +89,11 @@
           :padding-left       (when-not (or icon before)
                                 (case size 56 16 40 16 32 12 24 8))
           :padding-right      (when-not (or icon after)
-                                (case size 56 16 40 16 32 12 24 8))}
+                                (case size 56 16 40 16 32 12 24 8))
+          :padding-top        (when-not (or icon before after)
+                                (case size 56 0 40 9 32 5 24 3))
+          :padding-bottom     (when-not (or icon before after)
+                                (case size 56 0 40 9 32 5 24 4))}
          (when width
            {:width width})
          (when icon

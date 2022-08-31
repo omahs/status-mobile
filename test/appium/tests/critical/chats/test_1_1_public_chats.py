@@ -978,7 +978,10 @@ class TestEnsStickersMultipleDevicesMerged(MultipleSharedDeviceTestCase):
         self.home_2.add_contact(self.sender['public_key'])
         # To avoid activity centre for restored users
         [chat.send_message("hey!") for chat in (self.chat_1, self.chat_2)]
+
+        self.home_1.just_fyi("Close the ENS banner")
         [home.home_button.double_click() for home in (self.home_1, self.home_2)]
+        [home.ens_banner_close_button.click() for home in (self.home_1, self.home_2)]
 
     @marks.testrail_id(702152)
     def test_ens_purchased_in_profile(self):

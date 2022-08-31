@@ -100,6 +100,8 @@
                                           :clearInterval js/clearInterval}}))
 
 (def keychain #js {:setGenericPassword (constantly (.resolve js/Promise true))
+                   :setInternetCredentials #(js/Promise.resolve)
+                   :resetInternetCredentials #(js/Promise.resolve)
                    "ACCESSIBLE" {}
                    "ACCESS_CONTROL" {}})
 
@@ -133,7 +135,9 @@
 (def react-native-navigation #js {:Navigation #js {:constants (fn [] #js {:then identity})
                                                    :setDefaultOptions identity
                                                    :setRoot identity
+                                                   :dismissOverlay #(js/Promise.resolve)
                                                    :setLazyComponentRegistrator identity
+                                                   :pop identity
                                                    :push identity
                                                    :registerComponent identity
                                                    :events
@@ -238,10 +242,13 @@
 
 (def react-native-permissions #js {:default #js {}})
 
-(def push-notification-ios #js {})
+(def push-notification-ios #js {:default #js {:abandonPermissions identity}})
 
 (def rn-emoji-keyboard
   #js {:EmojiKeyboard #js {}})
+
+(def react-native-hole-view
+  #js {:RNHoleView #js {}})
 
 (def react-native-draggable-flatlist
   #js {:default #js {}})
@@ -301,12 +308,13 @@
     "react-native-camera-kit" react-native-camera-kit
     "react-native-permissions" react-native-permissions
     "rn-emoji-keyboard" rn-emoji-keyboard
+    "react-native-hole-view" react-native-hole-view
     "react-native-draggable-flatlist" react-native-draggable-flatlist
     "react-native-webview" react-native-webview
     "@react-native-community/audio-toolkit" react-native-audio-toolkit
     "react-native-image-viewing" react-native-image-viewing
     "react-native-share" react-native-share
-    "@react-native-community/async-storage" async-storage
+    "@react-native-async-storage/async-storage" async-storage
     "react-native-svg" react-native-svg
     "../src/js/worklet_factory.js" worklet-factory
     "./fleets.js" default-fleets

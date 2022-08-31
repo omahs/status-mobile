@@ -2,7 +2,7 @@
   (:require [quo2.foundations.colors :as colors]
             [quo.react-native :as rn]
             [clojure.string :as clojure-string]
-            [status-im.ui.components.icons.icons :as icons]))
+            [quo2.components.icon :as icons]))
 
 (defn channel-avatar [{:keys [big? dark? lock-status icon-color icon]}]
   (let [locked? (= :locked lock-status)
@@ -22,11 +22,12 @@
                        :align-items :center}}
       [icons/icon
        icon
-       {:color (if (clojure-string/blank? icon-color)
-                 "nil"
-                 icon-color)
-        :width (if big? 20 12)
-        :height (if big? 20 12)}]
+       (cond->
+        {:container-style {:width (if big? 20 12)
+                           :height (if big? 20 12)}
+         :size 20}
+         (not (clojure-string/blank? icon-color)) (assoc :color icon-color)
+         (clojure-string/blank? icon-color) (assoc :no-color true))]
       (when lock-exists?
         [rn/view {:style {:position :absolute
                           :left (if big?
@@ -41,10 +42,12 @@
                           :border-radius 15
                           :padding 2}}
          [icons/icon (if locked?
-                       :main-icons/locked12
-                       :main-icons/unlocked12)
+                       :main-icons/locked
+                       :main-icons/unlocked)
           {:color (if dark?
                     colors/neutral-40
                     colors/neutral-50)
-           :width 16
+           :container-style {:width 16
+                             :height 16}
+           :size 12
            :height 16}]])]]))

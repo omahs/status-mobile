@@ -24,7 +24,7 @@
                  {:label "Icon"
                   :key :icon
                   :type :select
-                  :options [{:key   :main-icons/peach20
+                  :options [{:key   :main-icons/peach
                              :value "Peach"}
                             {:key   :main-icons/wallet
                              :value "Wallet"}

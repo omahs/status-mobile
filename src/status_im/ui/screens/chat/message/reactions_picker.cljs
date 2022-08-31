@@ -44,18 +44,19 @@
                              :width  32}}]]]))]
    (when (seq actions)
      [rn/view {:style (styles/quick-actions-container)}
-      (for [action actions
-            :let   [{:keys [id label on-press]} (bean/bean action)]]
-        ^{:key id}
-        [rn/touchable-opacity {:on-press (fn []
-                                           (on-close)
-                                           (js/setTimeout on-press animation-duration))}
-         [rn/view {:style (styles/quick-actions-row)}
-          [quo/text {:color  (if (= id "delete") :negative :link)
-                     :weight :medium} label]
-          (when-let [icon (get id-icon id)]
-            [icons/icon icon
-             {:color (if (= id "delete") :red :blue)}])]])])])
+      (doall
+       (for [action actions
+             :let   [{:keys [id label on-press]} (bean/bean action)]]
+         ^{:key id}
+         [rn/touchable-opacity {:on-press (fn []
+                                            (on-close)
+                                            (js/setTimeout on-press animation-duration))}
+          [rn/view {:style (styles/quick-actions-row)}
+           [quo/text {:color  (if (= id "delete") :negative :link)
+                      :weight :medium} label]
+           (when-let [icon (get id-icon id)]
+             [icons/icon icon
+              {:color (if (= id "delete") :red :blue)}])]]))])])
 
 (def modal
   (reagent/adapt-react-class

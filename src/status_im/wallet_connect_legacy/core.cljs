@@ -221,7 +221,7 @@
 
 (fx/defn change-session-account
   {:events [:wallet-connect-legacy/change-session-account]}
-  [{:keys [db]} session account]
+  [{:keys [db] :as cofx} session account]
   (let [connector (:connector session)
         address (:address account)
         networks (get db :networks/networks)
@@ -231,13 +231,14 @@
         dapp-url (get-in session [:params 0 :peerMeta :url])
         peer-id (get-in session [:params 0 :peerId])
         chain-id (get-in current-network [:config :NetworkId])]
-    {:hide-wallet-connect-app-management-sheet nil
-     :wc-1-update-session [connector chain-id address]
-     :dispatch [:wallet-connect-legacy/save-session {:peer-id peer-id
-                                                     :dapp-url dapp-url
-                                                     :dapp-name dapp-name
-                                                     :connector connector}]
-     :db (assoc db :wallet-connect/showing-app-management-sheet? false)}))
+    (fx/merge cofx
+              {:hide-wallet-connect-app-management-sheet nil
+               :wc-1-update-session [connector chain-id address]
+               :db (assoc db :wallet-connect/showing-app-management-sheet? false)}
+              (save-session {:peer-id peer-id
+                             :dapp-url dapp-url
+                             :dapp-name dapp-name
+                             :connector connector}))))
 
 (fx/defn disconnect-by-peer-id
   {:events [:wallet-connect-legacy/disconnect-by-peer-id]}

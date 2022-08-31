@@ -21,6 +21,10 @@
             [quo2.screens.token-tag :as token-tag]
             [quo2.screens.wallet-user-avatar :as wallet-user-avatar]
             [re-frame.core :as re-frame]))
+            [quo.components.safe-area :as safe-area]
+            [quo2.screens.permission-tag :as permission-tag]
+            [quo2.screens.community-card-view :as community-card]
+            [quo2.screens.filter-tags :as filter-tags]))
 
 (def screens [{:name      :quo2-texts
                :insets    {:top false}
@@ -69,7 +73,16 @@
                :component info-message/preview-info-message}
               {:name      :information-box
                :insets    {:top false}
-               :component information-box/preview-information-box}])
+               :component information-box/preview-information-box}
+              {:name      :quo2-permission-tag
+               :insets    {:top false}
+               :component permission-tag/preview-permission-tag}
+              {:name      :quo2-filter-tags
+               :insets    {:top false}
+               :component filter-tags/preview-filter-tags}
+              {:name      :quo2-community-cards
+               :insets    {:top false}
+               :component community-card/preview-community-card}])
 
 (defn theme-switcher []
   [rn/view {:style {:flex-direction   :row

@@ -40,9 +40,9 @@ in {
     version = "13.3";
     allowHigher = true;
   };
-  go = super.pkgs.go_1_17;
-  buildGoPackage = super.pkgs.buildGo117Package;
-  buildGoModule = super.pkgs.buildGo117Module;
+  go = super.pkgs.go_1_18;
+  buildGoPackage = super.pkgs.buildGo118Package;
+  buildGoModule = super.pkgs.buildGo118Module;
   gomobile = super.gomobile.override {
     # FIXME: No Android SDK packages for aarch64-darwin.
     withAndroidPkgs = stdenv.system != "aarch64-darwin";

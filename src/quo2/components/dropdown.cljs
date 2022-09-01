@@ -107,7 +107,7 @@
   [{:keys [items on-select]}]
   (let [items-count (count items)]
     [:f>
-     (fn []
+     (fn [{:keys [items on-select]}]
        [rn/scroll-view {:style               {:height "100%"}
                         :horizontal          false
                         :nestedScrollEnabled true}

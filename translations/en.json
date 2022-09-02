@@ -1777,6 +1777,6 @@
     "music": "Music",
     "lifestyle": "Lifestyle",
     "podcasts": "Podcasts",
-    "NFT":"NFT"
-    
+    "NFT":"NFT",
+    "local-pairing-experimental-mode": "Local Pairing Mode ( alpha )"
 }

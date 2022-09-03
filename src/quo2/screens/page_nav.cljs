@@ -7,93 +7,105 @@
             [reagent.core :as reagent]))
 
 (def descriptor [{:label "Align middle-component to the left"
-                  :key :align-mid
-                  :type :boolean}
+                  :key   :align-mid
+                  :type  :boolean}
                  {:label "Page nav color"
-                  :key :page-nav-color
-                  :type :text}
+                  :key   :page-nav-color
+                  :type  :text}
+                 {:label "Horizontal align description"
+                  :key   :horizontal-description?
+                  :type  :boolean}
+                 {:label "Align single icon"
+                  :key :one-icon-align-left?
+                  :type :boolean}
                  {:label "Mid section main text"
-                  :key :mid-section-main-text
-                  :type :text}
-                 {:label "Mid section type"
-                  :key :mid-section-type
-                  :type :select
+                  :key   :mid-section-main-text
+                  :type  :text}
+                 {:label   "Mid section type"
+                  :key     :mid-section-type
+                  :type    :select
                   :options [{:value "Text only"
-                             :key :text-only}
+                             :key   :text-only}
                             {:value "Text with description"
-                             :key :text-with-description}
+                             :key   :text-with-description}
                             {:value "Text with one icon"
-                             :key :text-with-one-icon}
+                             :key   :text-with-one-icon}
                             {:value "Text with two icons"
-                             :key :text-with-two-icons}]}
-                 {:label "Mid section icon"
-                  :key :mid-section-icon
-                  :type :select
+                             :key   :text-with-two-icons}]}
+                 {:label   "Mid section icon"
+                  :key     :mid-section-icon
+                  :type    :select
                   :options [{:value "Placeholder"
-                             :key :main-icons/placeholder20}
+                             :key   :main-icons/placeholder20}
                             {:value "Wallet"
-                             :key :main-icons/wallet}]}
-                 {:label "Mid section left icon"
-                  :key :mid-section-left-icon
-                  :type :select
+                             :key   :main-icons/wallet}
+                            {:value "Dropdown"
+                             :key   :main-icons/dropdown}]}
+                 {:label   "Mid section left icon"
+                  :key     :mid-section-left-icon
+                  :type    :select
                   :options [{:value "Placeholder"
-                             :key :main-icons/placeholder20}
+                             :key   :main-icons/placeholder20}
                             {:value "Wallet"
-                             :key :main-icons/wallet}]}
-                 {:label "Mid section right icon"
-                  :key :mid-section-right-icon
-                  :type :select
+                             :key   :main-icons/wallet}]}
+                 {:label   "Mid section right icon"
+                  :key     :mid-section-right-icon
+                  :type    :select
                   :options [{:value "Placeholder"
-                             :key :main-icons/placeholder20}
+                             :key   :main-icons/placeholder20}
                             {:value "Wallet"
-                             :key :main-icons/wallet}]}
+                             :key   :main-icons/wallet}]}
                  {:label "Mid section description"
-                  :key :mid-section-description
-                  :type :text}
+                  :key   :mid-section-description
+                  :type  :text}
                  {:label "Mid section description color"
-                  :key :mid-section-description-color
-                  :type :text}
-                 {:label "Mid section description icon"
-                  :key :mid-section-description-icon
-                  :type :select
+                  :key   :mid-section-description-color
+                  :type  :text}
+                 {:label   "Mid section description icon"
+                  :key     :mid-section-description-icon
+                  :type    :select
                   :options [{:value "Placeholder"
-                             :key :main-icons/placeholder20}
+                             :key   :main-icons/placeholder20}
                             {:value "Wallet"
-                             :key :main-icons/wallet}]}
+                             :key   :main-icons/wallet}]}
                  {:label "Mid section description user icon"
-                  :key :mid-section-description-user-icon
-                  :type :text}
-                 {:label "Mid section main text icon"
-                  :key :mid-section-main-text-icon
-                  :type :select
+                  :key   :mid-section-description-user-icon
+                  :type  :text}
+                 {:label   "Mid section main text icon"
+                  :key     :mid-section-main-text-icon
+                  :type    :select
                   :options [{:value "Placeholder"
-                             :key :main-icons/placeholder20}
+                             :key   :main-icons/placeholder20}
                             {:value "Wallet"
-                             :key :main-icons/wallet}]}
+                             :key   :main-icons/wallet}
+                            {:value "Dropdown"
+                             :key   :main-icons/dropdown20}]}
                  {:label "Mid section main text icon color"
-                  :key :mid-section-main-text-icon-color
-                  :type :text}
+                  :key   :mid-section-main-text-icon-color
+                  :type  :text}
                  {:label "Mid section user icon URL"
-                  :key :mid-section-user-icon-uri
-                  :type :text}
-                 {:label "Left section icon"
-                  :key :left-section-icon
-                  :type :select
+                  :key   :mid-section-user-icon-uri
+                  :type  :text}
+                 {:label   "Left section icon"
+                  :key     :left-section-icon
+                  :type    :select
                   :options [{:value "Placeholder"
-                             :key :main-icons/placeholder20}
+                             :key   :main-icons/placeholder20}
                             {:value "Wallet"
-                             :key :main-icons/wallet}]}
+                             :key   :main-icons/wallet}]}
                  {:label "Left section icon color"
-                  :key :left-section-icon-color
-                  :type :text}
+                  :key   :left-section-icon-color
+                  :type  :text}
                  {:label "Left section icon bg color"
-                  :key :left-section-icon-bg-color
-                  :type :text}])
+                  :key   :left-section-icon-bg-color
+                  :type  :text}])
 
 (defn cool-preview []
   (let [state (reagent/atom {:right-section-icons [{:bg colors/primary-40
                                                     :no-color true
-                                                    :icon :main-icons/placeholder20}]})
+                                                    :icon :main-icons/placeholder20}]
+                             :horizontal-description? true
+                             :one-icon-align-left? true})
         right-icon {:bg colors/primary-40
                     :no-color true
                     :icon :main-icons/placeholder20}]

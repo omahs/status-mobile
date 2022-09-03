@@ -47,7 +47,7 @@
                                      :default-item "item1"
                                      :border-color colors/neutral-60
                                      :dd-color     colors/purple-50
-                                     :size         :small})
+                                     :size         :big})
         selected-item (reagent/cursor state [:default-item])
         on-select     #(reset! selected-item %)]
     (fn []

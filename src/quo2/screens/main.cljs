@@ -20,8 +20,7 @@
             [quo2.screens.token-overview :as token-overview]
             [quo2.screens.token-tag :as token-tag]
             [quo2.screens.wallet-user-avatar :as wallet-user-avatar]
-            [re-frame.core :as re-frame]))
-            [quo.components.safe-area :as safe-area]
+            [re-frame.core :as re-frame]
             [quo2.screens.permission-tag :as permission-tag]
             [quo2.screens.community-card-view :as community-card]
             [quo2.screens.filter-tags :as filter-tags]))

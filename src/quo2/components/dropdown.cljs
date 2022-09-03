@@ -16,32 +16,26 @@
 (def sizes {:big    {:icon-size 20
                      :font      {:font-size :paragraph-1}
                      :height    40
-                     :padding   {:padding-with-icon    {:padding-top    9
-                                                        :padding-bottom 9
-                                                        :padding-left   12
-                                                        :padding-right  12}
-                                 :padding-with-no-icon {:padding-top    9
-                                                        :padding-bottom 9
-                                                        :padding-left   16
-                                                        :padding-right  12}}}
+                     :padding   {:padding-with-icon    {:padding-vertical   9
+                                                        :padding-horizontal 12}
+                                 :padding-with-no-icon {:padding-vertical 9
+                                                        :padding-left     12
+                                                        :padding-right    8}}}
             :medium {:icon-size 20
                      :font      {:font-size :paragraph-1}
                      :height    32
-                     :padding   {:padding-with-icon    {:padding-top        5
-                                                        :padding-bottom     5
+                     :padding   {:padding-with-icon    {:padding-vertical   5
                                                         :padding-horizontal 8}
-                                 :padding-with-no-icon {:padding-top    5
-                                                        :padding-bottom 5
-                                                        :padding-left   12
-                                                        :padding-right  8}}}
+                                 :padding-with-no-icon {:padding-vertical 5
+                                                        :padding-left     12
+                                                        :padding-right    8}}}
             :small  {:icon-size 12
                      :font      {:font-size :label}
                      :height    24
-                     :padding   {:padding-with-icon    {:padding-vertical 3
-                                                        :padding-left     6
-                                                        :padding-right    6}
+                     :padding   {:padding-with-icon    {:padding-vertical   3
+                                                        :padding-horizontal 6}
                                  :padding-with-no-icon {:padding-vertical   3
-                                                        :padding-horizontal 8}}}})
+                                                        :padding-horizontal 6}}}})
 (defn color-by-10
   [color]
   (colors/alpha color 0.6))
@@ -51,7 +45,10 @@
         {:keys [width height width-with-icon padding font icon-size]} (size sizes)
         {:keys [padding-with-icon padding-with-no-icon]}              padding
         font-size                                                     (:font-size font)
-        spacing                                                       4]
+        spacing                                                       (case size
+                                                                        :big 4
+                                                                        :medium 2
+                                                                        :small 2)]
     [rn/touchable-opacity (cond-> {:on-press (fn []
                                                (if (swap! open? not)
                                                  (apply-anim dd-height 120)
@@ -64,9 +61,10 @@
                                                                    width-with-icon
                                                                    width)
                                                :height           height
-                                               :border-radius    (if (= :small size)
-                                                                   8
-                                                                   10)
+                                               :border-radius    (case size 
+                                                                   :big 12
+                                                                   :medium 10
+                                                                   :small 8)
                                                :flex-direction   :row
                                                :align-items      :center
                                                :border-width     1
@@ -88,26 +86,28 @@
      [text/text {:size   font-size
                  :weight :medium
                  :font   :font-medium
-                 :color  :main
-                 :style  {:margin-right spacing}} "Dropdown"]
+                 :color  :main} "Dropdown"]
      [icons/icon (if @open?
                    (if dark?
-                     :main-icons/pullup-black
-                     :main-icons/pullup)
+                     :main-icons/pullup-dark
+                     :main-icons/pullup
+                     )
                    (if dark?
-                     :main-icons/dropdown-black
-                     :main-icons/dropdown-white))
-      {:no-color        true
-       :size            20
-       :container-style {:width      icon-size
-                         :margin-top 1
-                         :height     icon-size}}]]))
+                     :main-icons/dropdown-dark
+                     :main-icons/dropdown))
+      {:size            20
+       :no-color        true
+       :container-style {:width         icon-size
+                         :border-radius 20
+                         :margin-left   (if (= :small size)
+                                          2
+                                          4)
+                         :margin-top    1
+                         :height        icon-size}}]]))
 
 (defn items-comp
   [{:keys [items on-select]}]
   (let [items-count (count items)]
-    [:f>
-     (fn [{:keys [items on-select]}]
        [rn/scroll-view {:style               {:height "100%"}
                         :horizontal          false
                         :nestedScrollEnabled true}
@@ -124,7 +124,7 @@
                                                            colors/white)
                                      :text-align          :center}
                           :on-press #(on-select item)}
-                         [text/text {:style {:text-align :center}} item]]) items))])]))
+                         [text/text {:style {:text-align :center}} item]]) items))]))
 
 (defn dropdown [{:keys [items icon text default-item on-select size disabled? border-color dd-color]}]
   [:f>

@@ -4,6 +4,7 @@
             [quo.design-system.colors :as colors]
             [re-frame.core :as re-frame]
             [quo2.screens.button :as button]
+            [quo2.screens.reacts :as reacts]
             [quo2.screens.token-overview :as token-overview]
             [quo2.screens.reacts :as reacts]
             [quo2.screens.text :as text]
@@ -31,6 +32,9 @@
 (def screens [{:name      :quo2-texts
                :insets    {:top false}
                :component text/preview-text}
+              {:name      :quo2-reacts
+               :insets    {:top false}
+               :component reacts/preview-reacts}
               {:name      :quo2-wallet-user-avatar
                :insets    {:top false}
                :component wallet-user-avatar/preview-wallet-user-avatar}

@@ -5,8 +5,7 @@
             [quo.design-system.colors :as colors]
             [re-frame.core :as re-frame]))
 
-(def cnt (reagent/atom 0))
-(defonce cnt-prev (reagent/atom 0))
+(defonce cnt (reagent/atom 0))
 (defonce warning? (reagent/atom false))
 (defonce visible (reagent/atom false))
 (defonce timeout (reagent/atom false))
@@ -21,10 +20,10 @@
   (re-frame/clear-subscription-cache!)
   (swap! cnt inc))
 
-(defn build-competed []
+(defn build-completed []
   (reset! label "reloading code")
   (reset! warning? false)
-  (reset! visible true))
+  (reset! visible false))
 
 (defn build-failed [warnings]
   (reset! warning? true)
@@ -45,7 +44,7 @@
             (and (= :build-complete type) (seq (:warnings info))))
         (build-failed (:warnings info))
         (= :build-complete type)
-        (build-competed)))
+        (build-completed)))
 
 (defn reload-view [_]
   (fn []

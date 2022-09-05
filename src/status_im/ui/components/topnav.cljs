@@ -39,7 +39,9 @@
                           :accessibility-label :notifications-button
                           :on-press #(do
                                        (re-frame/dispatch [:mark-all-activity-center-notifications-as-read])
-                                       (re-frame/dispatch [:navigate-to :notifications-center]))}
+                                       (re-frame/dispatch [:navigate-to :activity-center])
+                                       ;; (re-frame/dispatch [:navigate-to :notifications-center])
+                                       )}
       :main-icons2/notifications]
      (when (pos? notif-count)
        [react/view {:style (merge (styles/counter-public-container) {:top 5 :right 5})

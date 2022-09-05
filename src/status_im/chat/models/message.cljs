@@ -129,12 +129,12 @@
     ;;we want to render new messages as soon as possible
     ;;so we dispatch later all other events which can be handled async
     {:db db
-     :utils/dispatch-later
-     (concat [{:ms 20 :dispatch [:process-response response-js]}]
-             (when (and (:current-chat-id db) (= "active" (:app-state db)))
-               [{:ms 100 :dispatch [:chat/mark-all-as-read (:current-chat-id db)]}])
-             (when (seq senders)
-               [{:ms 100 :dispatch [:chat/add-senders-to-chat-users (vals senders)]}]))}))
+     :utils/dispatch-later (concat [{:ms 20 :dispatch [:process-response response-js]}]
+                                   ;; (when (and (:current-chat-id db) (= "active" (:app-state db)))
+                                   ;;   [{:ms 100 :dispatch [:chat/mark-all-as-read (:current-chat-id db)]}])
+                                   (when (seq senders)
+                                     [{:ms 100 :dispatch [:chat/add-senders-to-chat-users (vals senders)]}]))
+     }))
 
 (defn reduce-js-statuses [db ^js message-js]
   (let [chat-id             (.-localChatId message-js)

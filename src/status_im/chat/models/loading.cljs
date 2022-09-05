@@ -85,7 +85,8 @@
                                   (get-in db [:multiaccount :remote-push-notifications-enabled?])]
    ::json-rpc/call [{:method     "wakuext_markAllRead"
                      :params     [chat-id]
-                     :on-success #(re-frame/dispatch [::mark-all-read-successful])}]})
+                     ;; :on-success #(re-frame/dispatch [::mark-all-read-successful])
+                     :on-success #()}]})
 
 (fx/defn handle-mark-mark-all-read-in-community
   {:events [:chat.ui/mark-all-read-in-community-pressed]}

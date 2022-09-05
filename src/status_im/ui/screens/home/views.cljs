@@ -286,7 +286,7 @@
                   :accessibility-label "notifications-button"
                   :on-press #(do
                                (re-frame/dispatch [:mark-all-activity-center-notifications-as-read])
-                               (re-frame/dispatch [:navigate-to :notifications-center]))
+                               (re-frame/dispatch [:navigate-to :activity-center]))
                   :theme    :icon}
       :main-icons/notification]
      (when (pos? notif-count)

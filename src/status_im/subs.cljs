@@ -1922,6 +1922,16 @@
 
 ;;ACTIVITY CENTER NOTIFICATIONS ========================================================================================
 
+(re-frame/reg-sub
+ :activity-center/notifications-read
+ (fn [db]
+   (get-in db [:activity-center :read :notifications])))
+
+(re-frame/reg-sub
+ :activity-center/notifications-unread
+ (fn [db]
+   (get-in db [:activity-center :unread :notifications])))
+
 (defn- group-notifications-by-date
   [notifications]
   (->> notifications

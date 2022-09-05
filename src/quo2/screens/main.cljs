@@ -23,6 +23,7 @@
             [quo2.screens.token-overview :as token-overview]
             [quo2.screens.token-tag :as token-tag]
             [quo2.screens.wallet-user-avatar :as wallet-user-avatar]
+            [quo2.screens.new-messages :as new-messages]
             [re-frame.core :as re-frame]))
 
 (def screens [{:name      :quo2-texts
@@ -81,7 +82,10 @@
                :component filter-tags/preview-filter-tags}
               {:name      :quo2-community-cards
                :insets    {:top false}
-               :component community-card/preview-community-card}])
+               :component community-card/preview-community-card}
+              {:name      :quo2-new-messages
+               :insets    {:top false}
+               :component new-messages/preview-new-messages}])
 
 (defn theme-switcher []
   [rn/view {:style {:flex-direction   :row

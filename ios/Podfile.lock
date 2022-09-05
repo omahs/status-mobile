@@ -351,7 +351,7 @@ PODS:
     - React
   - RNReactNativeHapticFeedback (1.9.0):
     - React
-  - RNReanimated (2.1.0):
+  - RNReanimated (2.3.3):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -396,7 +396,7 @@ PODS:
   - SQLCipher/common (3.4.2)
   - SQLCipher/standard (3.4.2):
     - SQLCipher/common
-  - SSZipArchive (2.4.3)
+  - SSZipArchive
   - TOCropViewController (2.6.1)
   - TouchID (4.4.1):
     - React
@@ -711,6 +711,6 @@ SPEC CHECKSUMS:
   TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
-PODFILE CHECKSUM: 1a5b8878f89edd08eb4d37898a3a8721a7bb3388
+PODFILE CHECKSUM: a1de9468266e7f0b5273acea713782ab759690f1
 
-COCOAPODS: 1.11.0
+COCOAPODS: 1.11.3

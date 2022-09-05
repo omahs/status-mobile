@@ -3,7 +3,15 @@
 
 (def native-status (js/require "../../modules/react-native-status/nodejs/bindings"))
 
-(def test-dir "/tmp")
+(def fs (js/require "fs"))
+(def path (js/require "path"))
+(def os (js/require "os"))
+
+(def tmpdir (.tmpdir os))
+
+(def test-dir-prefix (.join path tmpdir "status-mobile-tests"))
+
+(def test-dir (.mkdtempSync fs test-dir-prefix))
 
 (defn signal-received-callback [a]
   (re-frame/dispatch [:signals/signal-received a]))
@@ -40,7 +48,6 @@
                                     settings
                                     config
                                     accounts-data))
-
             :logout (fn []
                       (.logout native-status))
             :generateAliasAndIdenticonAsync (fn [seed callback]
@@ -52,6 +59,11 @@
                                                        (.multiAccountGenerateAndDeriveAddresses
                                                         native-status
                                                         json)))
+            :multiAccountImportMnemonic (fn [json callback]
+                                          (callback
+                                           (.multiAccountImportMnemonic
+                                            native-status
+                                            json)))
             :multiAccountLoadAccount (fn [json callback]
                                        (callback
                                         (.multiAccountLoadAccount
@@ -67,8 +79,11 @@
                              (.initKeystore
                               native-status
                               (str test-dir "/keystore/" key-uid))))
-
             :identicon (fn [pk]
                          (.identicon native-status pk))
-
+            :validateMnemonic (fn [json callback]
+                                (callback
+                                 (.validateMnemonic
+                                  native-status
+                                  json)))
             :startLocalNotifications identity}))

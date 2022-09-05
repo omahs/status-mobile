@@ -120,6 +120,7 @@
             [quo2.screens.main :as quo2.preview]
             [status-im.utils.config :as config]
             [status-im.ui.screens.wallet.manage-connections.views :as manage-all-connections]
+            [status-im.ui.screens.syncing.views :as settings-syncing]
             [status-im.navigation2.screens :as navigation2.screens]))
             ;[quo2.foundations.colors :as quo2.colors]))
 
@@ -885,6 +886,11 @@
             :insets    {:bottom true}
             :options   {:topBar {:title {:text (i18n/label :all-connections)}}}
             :component manage-all-connections/views}
+
+           {:name      :settings-syncing
+            :insets    {:bottom true}
+            :options   {:topBar {:title {:text (i18n/label :syncing)}}}
+            :component settings-syncing/views}
 
            ;; BUG REPORT
            {:name      :bug-report

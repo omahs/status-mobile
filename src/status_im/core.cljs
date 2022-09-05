@@ -41,6 +41,7 @@
   (utils.universal-links/initialize)
 
   (async-storage/get-item :new-ui-enabled? #(reset! config/new-ui-enabled? %))
+  (async-storage/get-item :local-pairing-mode-enabled? #(reset! config/local-pairing-mode-enabled? %))
 
   ;;DEV
   (snoopy/subscribe!)

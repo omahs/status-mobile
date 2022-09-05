@@ -167,6 +167,12 @@
        :accessibility-label :about-button
        :chevron             true
        :on-press            #(re-frame/dispatch [:navigate-to :about-app])}]
+     [quo/list-item
+      {:icon                :main-icons/info
+       :title               (i18n/label :t/syncing)
+       :accessibility-label :synching
+       :chevron             true
+       :on-press            #(re-frame/dispatch [:navigate-to :settings-syncing])}]
      [react/view {:padding-vertical 24}
       [quo/list-item
        {:icon                :main-icons/log-out

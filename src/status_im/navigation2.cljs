@@ -16,6 +16,13 @@
    :dispatch                 [:init-root (if @config/new-ui-enabled? :home-stack :chat-stack)]
    ::async-storage/set!      {:new-ui-enabled? @config/new-ui-enabled?}})
 
+(fx/defn toggle-local-pairing-experimental-mode
+  {:events [:toggle-local-pairing-experimental-mode]}
+  [_]
+  (swap! config/local-pairing-mode-enabled? not)
+  (reloader/reload)
+  {::async-storage/set!      {:local-pairing-mode-enabled? @config/local-pairing-mode-enabled?}})
+
 (fx/defn init-root-nav2
   {:events [:init-root-nav2]}
   [_ root-id]

@@ -16,7 +16,7 @@
                                           webview-debug
                                           new-ui-enabled?
                                           mutual-contact-requests-enabled?
-                                          local-pairing-experimental-mode-enabled?]}]
+                                          local-pairing-mode-enabled?]}]
   (keep
    identity
    [{:size                 :small
@@ -131,7 +131,7 @@
      :container-margin-bottom 8
      :on-press                #(re-frame/dispatch [:toggle-local-pairing-experimental-mode])
      :accessory               :switch
-     :active                  new-ui-enabled?}]))
+     :active                  local-pairing-mode-enabled?}]))
 
 (defn- flat-list-data [options]
   (normal-mode-settings-data options))
@@ -150,8 +150,7 @@
                   transactions-management-enabled? [:wallet/transactions-management-enabled?]
                   current-log-level                [:log-level/current-log-level]
                   current-fleet                    [:fleets/current-fleet]
-                  mutual-contact-requests-enabled? [:mutual-contact-requests/enabled?]
-                  local-pairing-mode-enabled?      [:mutual-contact-requests/enabled?]]
+                  mutual-contact-requests-enabled? [:mutual-contact-requests/enabled?]]
     [list/flat-list
      {:data      (flat-list-data
                   {:network-name                     network-name
@@ -164,6 +163,7 @@
                    :waku-bloom-filter-mode           waku-bloom-filter-mode
                    :webview-debug                    webview-debug
                    :new-ui-enabled?                  @config/new-ui-enabled?
+                   :local-pairing-mode-enabled?      @config/local-pairing-mode-enabled?
                    :mutual-contact-requests-enabled? mutual-contact-requests-enabled?})
       :key-fn    (fn [_ i] (str i))
       :render-fn render-item}]))

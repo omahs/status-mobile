@@ -1778,5 +1778,7 @@
     "lifestyle": "Lifestyle",
     "podcasts": "Podcasts",
     "NFT":"NFT",
-    "local-pairing-experimental-mode": "Local Pairing Mode ( alpha )"
+    "local-pairing-experimental-mode": "Local Pairing Mode ( alpha )",
+    "syncing": "Syncing",
+    "synced-devices": "Synced Devices"
 }

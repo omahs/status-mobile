@@ -53,13 +53,12 @@
      [icons/icon emoji {:no-color true
                         :width 16
                         :height 16}]
-     [quo2-text/text {:style {:font-size 13
-                              :font-weight "500"
-                              :line-height 18
-                              :color text-color
-                              :flex-direction :row
-                              :align-items :center
-                              :justify-content :center}}
+     [quo2-text/text {:size :paragraph-2
+                      :weight :semi-bold
+                      :color text-color
+                      :flex-direction :row
+                      :align-items :center
+                      :justify-content :center}
       (if clicks-positive?
         (str " " numeric-value)
         "")]]))

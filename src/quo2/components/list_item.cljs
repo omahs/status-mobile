@@ -8,7 +8,6 @@
             [quo2.components.text :as text]
             [quo.components.controls.view :as controls]
             [quo.components.tooltip :as tooltip]
-            ;; FIXME:
             [status-im.ui.components.icons.icons :as icons]
             [quo.components.animated.pressable :as animated]))
 
@@ -65,7 +64,7 @@
           [icons/icon icon {:color icon-color}]])])))
 
 (defn title-column
-  [{:keys [title text-color subtitle subtitle-max-lines subtitle-secondary
+  [{:keys [title text-color subtitle subtitle-max-lines
            title-accessibility-label size text-size title-text-weight
            right-side-present?]}]
   [rn/view {:style (merge (:tiny spacing/padding-horizontal)
@@ -74,7 +73,6 @@
                             {:flex            1
                              :justify-content :center}))}
    (cond
-
      (and title subtitle)
      [:<>
       ;; FIXME(Ferossgp): ReactNative 63 will support view inside text on andrid, remove thess if when migrating
@@ -87,38 +85,14 @@
                     :size                text-size}
          title]
         title)
-      (if (string? subtitle-secondary)
-        [rn/view {:flex-direction :row}
-         [text/text {:style {:max-width "56.5%"}
-                     :weight          :regular
-                     :color           :secondary
-                     :ellipsize-mode  :tail
-                     :number-of-lines subtitle-max-lines
-                     :size            text-size}
-          subtitle]
-         [text/text {:style {:width "7%" :text-align :center}
-                     :weight          :regular
-                     :color           :secondary
-                     :ellipsize-mode  :middle
-                     :number-of-lines subtitle-max-lines
-                     :size            text-size}
-          "•"]
-         [text/text {:style {:max-width "36.5%"}
-                     :weight          :regular
-                     :color           :secondary
-                     :ellipsize-mode  :middle
-                     :number-of-lines subtitle-max-lines
-                     :size            text-size}
-          subtitle-secondary]]
-        (if (string? subtitle)
-          [text/text {:weight          :regular
-                      :color           :secondary
-                      :ellipsize-mode  :tail
-                      :number-of-lines subtitle-max-lines
-                      :size            text-size}
-           subtitle]
-          subtitle))]
-
+      (if (string? subtitle)
+        [text/text {:weight          :regular
+                    :color           :secondary
+                    :ellipsize-mode  :tail
+                    :number-of-lines subtitle-max-lines
+                    :size            text-size}
+         subtitle]
+        subtitle)]
      title
      (if (string? title)
        [text/text {:weight                    (or title-text-weight :regular)
@@ -177,7 +151,7 @@
 (defn list-item
   [{:keys [type accessory disabled subtitle-max-lines icon icon-container-style
            left-side-alignment icon-color
-           title subtitle subtitle-secondary active on-press on-long-press chevron size text-size
+           title subtitle active on-press on-long-press chevron size text-size
            accessory-text accessibility-label title-accessibility-label accessory-style
            haptic-feedback haptic-type error animated animated-accessory? title-text-weight container-style
            active-background-enabled]
@@ -194,7 +168,7 @@
         optional-haptic (fn []
                           (when haptic-feedback
                             (haptic/trigger haptic-type)))
-        component       (cond
+        touchable-view  (cond
                           (and (not on-press)
                                (not on-long-press))
                           rn/view
@@ -203,7 +177,7 @@
     [rn/view {:background-color (if (and (= accessory :radio) active)
                                   active-background
                                   passive-background)}
-     [component
+     [touchable-view
       (merge {:type                :list-item
               :disabled            disabled
               :bg-color            (when active-background-enabled active-background)
@@ -231,7 +205,6 @@
                    :text-size                 text-size
                    :subtitle                  subtitle
                    :subtitle-max-lines        subtitle-max-lines
-                   :subtitle-secondary        subtitle-secondary
                    :right-side-present?       (or accessory chevron)}]
        [right-side {:chevron             chevron
                     :active              active

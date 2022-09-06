@@ -54,16 +54,17 @@
            [components/separator]])
         (for [action danger-actions]
           ^{:key (:id action)}
-          [quo2.list-item/list-item
-           {:type                :danger
-            :size                :small
-            :title-text-weight   :medium
-            :title               (:label action)
-            :accessibility-label (:label action)
-            :icon                (:icon action)
-            :on-press            #(do
-                                    ((:on-press action))
-                                    (re-frame/dispatch [:bottom-sheet/hide]))}])
+          (let [on-press (:on-press action)]
+            [quo2.list-item/list-item
+             {:type                :danger
+              :size                :small
+              :title-text-weight   :medium
+              :title               (:label action)
+              :accessibility-label (:label action)
+              :icon                (:icon action)
+              :on-press            #(do
+                                      (when on-press (on-press))
+                                      (re-frame/dispatch [:bottom-sheet/hide]))}]))
         (when-not (empty? admin-actions)
           [rn/view {:style {:padding-vertical 8}}
            [components/separator]])

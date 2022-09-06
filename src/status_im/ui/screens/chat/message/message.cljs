@@ -26,7 +26,9 @@
             [status-im.ui.components.animation :as animation]
             [status-im.chat.models.images :as images]
             [status-im.chat.models.pin-message :as models.pin-message]
-            [status-im.ui.components.fast-image :as fast-image])
+            [status-im.ui.components.fast-image :as fast-image]
+            [status-im.ui.screens.chat.bottom-sheets.context-drawer :as message-context-drawer]
+            [status-im.ui.screens.chat.message.reactions-row :as reaction-row])
   (:require-macros [status-im.utils.views :refer [defview letsubs]]))
 
 (defn message-timestamp-anim
@@ -595,23 +597,22 @@
        [react/touchable-highlight
         (when-not modal
           {:on-long-press
-           (fn [] (on-long-press (if (and outgoing config/delete-message-enabled?)
-                                   [{:type     :main
-                                     :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
-                                     :label    (i18n/label :t/message-reply)
-                                     :icon     :main-icons/reply-context20
-                                     :id       :reply}
-                                    {:type     :main
-                                     :on-press #(pin-message message)
-                                     :label    (i18n/label  (if pinned :t/unpin-from-chat :t/pin-to-chat))
-                                     :icon     :main-icons/pin-context20
-                                     :id       (if pinned :unpin :pin)}
+           (fn [] (on-long-press [{:type     :main
+                                   :on-press #(re-frame/dispatch [:chat.ui/reply-to-message message])
+                                   :label    (i18n/label :t/message-reply)
+                                   :icon     :main-icons/reply-context20
+                                   :id       :reply}
+                                  {:type     :main
+                                   :on-press #(pin-message message)
+                                   :label    (i18n/label  (if pinned :t/unpin-from-chat :t/pin-to-chat))
+                                   :icon     :main-icons/pin-context20
+                                   :id       (if pinned :unpin :pin)}
+                                  (when (and outgoing config/delete-message-enabled?)
                                     {:type     :danger
                                      :on-press #(re-frame/dispatch [:chat.ui/soft-delete-message message])
                                      :label    (i18n/label :t/delete-for-everyone)
                                      :icon     :main-icons/delete-context20
-                                     :id       :delete}]
-                                   [])))
+                                     :id       :delete})]))
            :on-press (fn []
                        (reset! show-timestamp? true))})
         [react/view style/message-view-wrapper
@@ -668,25 +669,37 @@
   [message-content-wrapper message
    [unknown-content-type message]])
 
-(defn chat-message [{:keys [display-photo? pinned pinned-by] :as message} space-keeper]
-  [:<>
-   [reactions/with-context-drawer
-    {:message         message
-     :reactions       @(re-frame/subscribe [:chats/message-reactions (:message-id message) (:chat-id message)])
-     :picker-on-open  (fn []
-                        (space-keeper true))
-     :picker-on-close (fn []
-                        (space-keeper false))
-     :send-emoji      (fn [{:keys [emoji-id]}]
-                        (re-frame/dispatch [::models.reactions/send-emoji-reaction
-                                            {:message-id (:message-id message)
-                                             :emoji-id   emoji-id}]))
-     :retract-emoji   (fn [{:keys [emoji-id emoji-reaction-id]}]
-                        (re-frame/dispatch [::models.reactions/send-emoji-reaction-retraction
-                                            {:message-id        (:message-id message)
-                                             :emoji-id          emoji-id
-                                             :emoji-reaction-id emoji-reaction-id}]))
-     :render          ->message}]
-   (when pinned
-     [react/view {:style (style/pin-indicator-container)}
-      [pinned-by-indicator display-photo? pinned-by]])])
+(defn chat-message [{:keys [display-photo? pinned pinned-by] :as message}]
+  (let [reactions @(re-frame/subscribe [:chats/message-reactions (:message-id message) (:chat-id message)])
+        own-reactions (reduce (fn [acc {:keys [emoji-id own]}]
+                                (if own (conj acc emoji-id) acc))
+                              [] reactions)
+        send-emoji      (fn [{:keys [emoji-id]}]
+                          (re-frame/dispatch [::models.reactions/send-emoji-reaction
+                                              {:message-id (:message-id message)
+                                               :emoji-id   emoji-id}]))
+        retract-emoji   (fn [{:keys [emoji-id emoji-reaction-id]}]
+                          (re-frame/dispatch [::models.reactions/send-emoji-reaction-retraction
+                                              {:message-id        (:message-id message)
+                                               :emoji-id          emoji-id
+                                               :emoji-reaction-id emoji-reaction-id}]))
+        on-emoji-press (fn [emoji-id]
+                         (let [active ((set own-reactions) emoji-id)]
+                           (if active
+                             (retract-emoji {:emoji-id          emoji-id
+                                             :emoji-reaction-id (reactions/extract-id reactions emoji-id)})
+                             (send-emoji {:emoji-id emoji-id}))))
+        on-open-drawer (fn [actions]
+                         (re-frame/dispatch [:bottom-sheet/show-sheet
+                                             {:content (message-context-drawer/message-options
+                                                        actions
+                                                        (into #{} (js->clj own-reactions))
+                                                        #(on-emoji-press %))}]))]
+    [:<>
+     [react/view
+      [->message message {:modal         false
+                          :on-long-press on-open-drawer}]
+      [reaction-row/message-reactions message reactions nil]]
+     (when pinned
+       [react/view {:style (style/pin-indicator-container)}
+        [pinned-by-indicator display-photo? pinned-by]])]))

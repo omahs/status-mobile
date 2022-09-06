@@ -4,9 +4,7 @@
             [reagent.core :as reagent]
             [quo.react-native :as rn]
             [quo.react :as react]
-            [quo.animated :as animated]
-            [re-frame.core :as re-frame]
-            [status-im.ui.screens.chat.bottom-sheets.context-drawer :as message-context-drawer]))
+            [quo.animated :as animated]))
 
 (defn measure-in-window [ref cb]
   (.measureInWindow ^js ref cb))
@@ -21,7 +19,7 @@
                   :width  width
                   :height height})))))
 
-(defn- extract-id [reactions id]
+(defn extract-id [reactions id]
   (->> reactions
        (filter (fn [{:keys [emoji-id]}] (= emoji-id id)))
        first
@@ -95,30 +93,3 @@
              [render message {:modal         true
                               :on-long-press #()
                               :close-modal   on-close}]]])]))))
-
-(defn with-context-drawer []
-  (let [ref              (react/create-ref)
-        actions          (reagent/atom nil)]
-    (fn [{:keys [message reactions outgoing outgoing-status render send-emoji retract-emoji timeline]}]
-      (let [own-reactions  (reduce (fn [acc {:keys [emoji-id own]}]
-                                     (if own (conj acc emoji-id) acc))
-                                   [] reactions)
-            on-emoji-press (fn [emoji-id]
-                             (let [active ((set own-reactions) emoji-id)]
-                               (if active
-                                 (retract-emoji {:emoji-id          emoji-id
-                                                 :emoji-reaction-id (extract-id reactions emoji-id)})
-                                 (send-emoji {:emoji-id emoji-id}))))
-            on-open        (fn []
-                             (re-frame/dispatch [:bottom-sheet/show-sheet
-                                                 {:content (message-context-drawer/message-options @actions (into #{} (js->clj own-reactions)) #(on-emoji-press %))}]))]
-        [:<>
-         [rn/view {:ref         ref
-                   :collapsable false}
-          [render message {:modal         false
-                           :on-long-press (fn [act]
-                                            (when (or (not outgoing)
-                                                      (and outgoing (= outgoing-status :sent)))
-                                              (reset! actions act)
-                                              (get-picker-position ref on-open)))}]
-          [reaction-row/message-reactions message reactions timeline]]]))))
